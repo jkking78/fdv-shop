@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FDV shopping | Perruques, Mèches & Éventails en Pagne</title>
-  <meta name="description" content="FDV shopping : Perruques Body Wave, Deep Wave 100% Cheveux Humains et Éventails en Pagne Wax à 1 700 FCFA." />
+  <title>FDV shopping | Maison de Haute Beauté, Perruques & Couture</title>
+  <meta name="description" content="FDV shopping : Perruques Body Wave 100% Cheveux Humains & Éventails en Pagne Wax faits main." />
   
   <!-- FACEBOOK / META COMMERCE OPEN GRAPH META TAGS -->
   <meta property="og:site_name" content="FDV shopping" />
   <meta property="og:type" content="og:product" />
-  <meta property="og:title" content="FDV shopping | Perruques, Mèches & Éventails en Pagne" />
+  <meta property="og:title" content="FDV shopping | Maison de Haute Beauté & Couture" />
   <meta property="og:description" content="Collection Perruques Body Wave, Deep Wave, Lisse & Éventails en Pagne Wax faits main." />
   <meta property="og:image" content="/assets/wigs/bodywave-30.jpg" />
   <meta property="og:image:width" content="800" />
@@ -23,7 +23,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- React & ReactDOM CDN -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -41,48 +41,6 @@
 
   <!-- External Stylesheet -->
   <link rel="stylesheet" href="/src/index.css" />
-  
-  <style>
-    :root {
-      --bg-main: #FAF7F4;
-      --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-    }
-    
-    .fb-share-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: #1877F2;
-      color: #FFFFFF;
-      font-size: 0.82rem;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    .fb-share-btn:hover {
-      background: #145DBF;
-    }
-
-    .file-upload-zone {
-      border: 2px dashed #D8C3DD;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      background: #FAF6FA;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-    .file-upload-zone:hover {
-      border-color: #68486E;
-      background: #F4ECF6;
-    }
-  </style>
 </head>
 <body>
   <div id="root"></div>
@@ -112,9 +70,7 @@
         db = window.firebase.firestore();
         isFirebaseActive = true;
       }
-    } catch (e) {
-      console.log('Local Mode');
-    }
+    } catch (e) {}
 
     const sanitizeText = (str) => {
       if (!str) return '';
@@ -129,9 +85,7 @@
 
     const Icon = ({ name, size = 20, color = 'currentColor', fill = 'none', className = '', style = {} }) => {
       const LucideIcon = window.lucide ? window.lucide.icons[name] : null;
-      if (!LucideIcon) {
-        return null;
-      }
+      if (!LucideIcon) return null;
       return (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +126,7 @@
         fabric: '100% Cheveux Humains Brésilien Premium',
         care: 'Laver avec shampooing doux et après-shampooing hydratant',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -208,7 +162,7 @@
         fabric: '100% Cheveux Naturels',
         care: 'Lavage doux',
         sizes: ['Taille 12'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -226,7 +180,7 @@
         fabric: '100% Cheveux Naturels',
         care: 'Entretien facile',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -244,7 +198,7 @@
         fabric: 'Cheveux Qualité Supérieure',
         care: 'Entretien facile',
         sizes: ['Taille Unique'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#68486E' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#5C3260' }],
         isNew: false
       },
       {
@@ -262,7 +216,7 @@
         fabric: '100% Cheveux Humains Ondulés',
         care: 'Spray bouclant',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -280,7 +234,7 @@
         fabric: '100% Cheveux Humains VIP',
         care: 'Démêler aux doigts',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -316,7 +270,7 @@
         fabric: '100% Cheveux Humains',
         care: 'Nourrir avec une huile',
         sizes: ['Taille 26'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -334,7 +288,7 @@
         fabric: '100% Virgin Human Hair Straight',
         care: 'Protéger de la chaleur',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -352,7 +306,7 @@
         fabric: '100% Cheveux Humains',
         care: 'Humidifier',
         sizes: ['Taille 14'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -370,7 +324,7 @@
         fabric: '100% Cheveux Humains',
         care: 'Rincer à l’eau tiède',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A222B' }],
+        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
         isNew: true
       }
     ];
@@ -394,7 +348,7 @@
         fabric: '100% Pagne Wax Véritable',
         care: 'Nettoyer avec un chiffon sec',
         sizes: ['Taille Unique'],
-        colors: [{ name: `Motif Wax #${num}`, hex: num % 2 === 0 ? '#E89CAE' : '#D4AF37' }],
+        colors: [{ name: `Motif Wax #${num}`, hex: num % 2 === 0 ? '#E2A7B4' : '#D4AF37' }],
         isNew
       };
     });
@@ -551,7 +505,7 @@
           fabric: 'Qualité Supérieure',
           care: 'Entretien recommandé',
           sizes: ['Taille Unique'],
-          colors: [{ name: 'Couleur Unique', hex: '#68486E' }],
+          colors: [{ name: 'Couleur Unique', hex: '#5C3260' }],
           isNew: true
         };
 
@@ -619,7 +573,7 @@
         if (e) e.stopPropagation();
         if (wishlistIds.includes(product.id)) {
           setWishlistIds(prev => prev.filter(id => id !== product.id));
-          addToast(`Rétiré des favoris.`, 'wishlist');
+          addToast(`Retiré des favoris.`, 'wishlist');
         } else {
           setWishlistIds(prev => [...prev, product.id]);
           addToast(`Ajouté aux favoris.`, 'wishlist');
@@ -648,19 +602,24 @@
 
       return (
         <div className="app-layout">
-          {/* 1. TOP ANNOUNCEMENT BAR (SINGLE ELEGANT LINE) */}
+          {/* 1. TOP ANNOUNCEMENT BAR */}
           <div className="announcement-bar">
             <div className="announcement-content">
-              <span>Perruques & Mèches Human Hair • Éventails Pagne Wax (1 700 FCFA) • Paiement à la Livraison</span>
+              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) <span className="announcement-badge">FDV10</span></span>
             </div>
           </div>
 
-          {/* 2. MAIN HEADER (CLEAN ONE-LINE LOGO + ICONS) */}
+          {/* 2. MAIN HEADER */}
           <header className="main-header">
             <div className="header-container">
               <a href="#" className="brand-logo" onClick={() => setActiveCategory('Perruques & Mèches')}>
-                <span className="brand-logo-text">FDV shopping</span>
-                <span className="brand-subtext">BEAUTÉ & COUTURE</span>
+                <div className="brand-emblem">
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1rem', fontWeight: 700 }}>FDV</span>
+                </div>
+                <div>
+                  <span className="brand-logo-title">FDV shopping</span>
+                  <span className="brand-subtext">HAUTE BEAUTÉ & COUTURE</span>
+                </div>
               </a>
 
               <nav className="desktop-nav">
@@ -688,14 +647,14 @@
 
               <div className="header-actions">
                 <button className="icon-btn" onClick={() => setIsSearchOpen(true)} title="Rechercher">
-                  <Icon name="search" size={22} color="#2C222E" />
+                  <Icon name="search" size={20} />
                 </button>
                 <button className="icon-btn" onClick={() => setIsWishlistOpen(true)} title="Favoris">
-                  <Icon name="heart" size={22} color="#2C222E" />
+                  <Icon name="heart" size={20} />
                   {wishlistIds.length > 0 && <span className="icon-badge">{wishlistIds.length}</span>}
                 </button>
                 <button className="icon-btn" onClick={() => setIsCartOpen(true)} title="Panier">
-                  <Icon name="shopping-bag" size={22} color="#2C222E" />
+                  <Icon name="shopping-bag" size={20} />
                   {cart.reduce((a, c) => a + c.quantity, 0) > 0 && (
                     <span className="icon-badge">{cart.reduce((a, c) => a + c.quantity, 0)}</span>
                   )}
@@ -711,14 +670,14 @@
             <div className="hero-container">
               <div className="hero-content">
                 <div className="hero-tag">
-                  <span>Collection Exclusive 2026</span>
+                  <span>COLLECTION HAUTE COUTURE 2026</span>
                 </div>
                 <h1 className="hero-title">
-                  PERRUQUES & MÈCHES <br />
-                  <span className="hero-title-accent">HAUTE QUALITÉ</span>
+                  ÉLÉGANCE & <br />
+                  <span className="hero-title-accent">MAGNIFICENCE</span>
                 </h1>
                 <p className="hero-subtitle">
-                  Cheveux 100% humains, Body Wave, Deep Wave, Lisse & Coupe Carré. Qualité certifiée et confection soignée.
+                  Cheveux 100% humains, Body Wave, Deep Wave, Lisse & Coupe Carré. Éventails en Pagne fait main.
                 </p>
                 <button
                   className="btn-primary"
@@ -727,7 +686,7 @@
                     document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
                   }}
                 >
-                  <span>DÉCOUVRIR LE CATALOGUE</span>
+                  <span>EXPLORER LA COLLECTION</span>
                   <Icon name="arrow-right" size={18} />
                 </button>
               </div>
@@ -737,13 +696,8 @@
                   <img src="/assets/wigs/bodywave-30.jpg" alt="Body Wave Taille 30" />
                 </div>
                 <div className="floating-badge">
-                  <div className="floating-badge-icon">
-                    <Icon name="shield-check" size={20} color="#27AE60" />
-                  </div>
-                  <div>
-                    <div className="floating-badge-title">Qualité Garantit</div>
-                    <div className="floating-badge-subtitle">100% Cheveux Humains Premium</div>
-                  </div>
+                  <div className="floating-badge-title">FDV Privilège</div>
+                  <div className="floating-badge-subtitle">100% Cheveux Humains Premium</div>
                 </div>
               </div>
             </div>
@@ -753,11 +707,11 @@
           <section id="featured-section" className="section-container">
             <div className="section-header">
               <div>
-                <span className="section-subtitle">CATALOGUE ({filteredProducts.length} ARTICLES)</span>
+                <span className="section-subtitle">BOUTIQUE EN LIGNE ({filteredProducts.length} ARTICLES)</span>
                 <h2 className="section-title">Catalogue {activeCategory}</h2>
               </div>
               {isAdminAuthenticated && (
-                <button className="btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }} onClick={() => setIsAdminFormModalOpen(true)}>
+                <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={() => setIsAdminFormModalOpen(true)}>
                   <Icon name="plus-circle" size={16} />
                   <span>+ Ajouter un Produit</span>
                 </button>
@@ -817,7 +771,7 @@
                         onClick={(e) => handleToggleWishlist(product, e)}
                         title="Favoris"
                       >
-                        <Icon name="heart" size={18} fill={isWishlisted ? '#E89CAE' : 'none'} color={isWishlisted ? '#E89CAE' : '#6E6373'} />
+                        <Icon name="heart" size={18} fill={isWishlisted ? '#E2A7B4' : 'none'} color={isWishlisted ? '#E2A7B4' : '#6C5B70'} />
                       </button>
 
                       <img src={product.image} alt={product.title} loading="lazy" />
@@ -857,11 +811,11 @@
                   <Icon name="x" size={20} />
                 </button>
                 <div style={{ padding: '32px', textAlign: 'center' }}>
-                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FAF0F2', color: '#68486E', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#F7EBEF', color: '#2A172E', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                     <Icon name="lock" size={26} />
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E', marginBottom: '6px' }}>Accès Propriétaire</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#6E6373', marginBottom: '20px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
                     Saisissez votre mot de passe administrateur.
                   </p>
 
@@ -895,7 +849,7 @@
                 <div style={{ padding: '32px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <div>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E' }}>Ajouter un Produit</h3>
+                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E' }}>Ajouter un Produit</h3>
                       <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Session Administrateur Active</p>
                     </div>
                     <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', padding: '4px 10px', borderRadius: '12px' }}>
@@ -905,7 +859,7 @@
 
                   <form onSubmit={handleAddCustomProduct} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '4px' }}>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
                         Nom / Titre du Produit *
                       </label>
                       <input
@@ -921,7 +875,7 @@
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '4px' }}>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
                           Catégorie *
                         </label>
                         <select
@@ -938,7 +892,7 @@
                       </div>
 
                       <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '4px' }}>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
                           Prix (en FCFA) *
                         </label>
                         <input
@@ -954,13 +908,13 @@
                     </div>
 
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '6px' }}>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '6px' }}>
                         Photo du Produit *
                       </label>
                       
                       <label className="file-upload-zone">
-                        <Icon name="upload-cloud" size={26} color="#68486E" />
-                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#68486E' }}>
+                        <Icon name="upload-cloud" size={26} color="#5C3260" />
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#5C3260' }}>
                           📷 Choisir une Photo (JPG, PNG)
                         </span>
                         <input
@@ -986,7 +940,7 @@
                     </div>
 
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '4px' }}>
+                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
                         Description
                       </label>
                       <textarea
@@ -1012,11 +966,18 @@
             <div className="footer-container">
               <div>
                 <div className="footer-brand">
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 700 }}>FDV shopping</span>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700 }}>FDV shopping</span>
                 </div>
                 <p className="footer-desc">
                   Perruques, Mèches Human Hair & Éventails en Pagne de haute facture. Célébrez votre beauté au quotidien.
                 </p>
+              </div>
+              <div>
+                <h4 className="footer-col-title">Navigation</h4>
+                <ul className="footer-links">
+                  <li><a href="#featured-section" className="footer-link" onClick={() => setActiveCategory('Perruques & Mèches')}>Perruques & Mèches</a></li>
+                  <li><a href="#featured-section" className="footer-link" onClick={() => setActiveCategory('Éventails en Pagne')}>Éventails en Pagne</a></li>
+                </ul>
               </div>
               <div>
                 <h4 className="footer-col-title">Administration</h4>
@@ -1046,7 +1007,7 @@
               <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>
               <div className="cart-drawer">
                 <div className="cart-header">
-                  <h3 className="cart-title font-serif">Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})</h3>
+                  <h3 className="cart-title font-serif" style={{ fontSize: '1.4rem', fontFamily: 'var(--font-serif)' }}>Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})</h3>
                   <button className="icon-btn" onClick={() => setIsCartOpen(false)}>
                     <Icon name="x" size={20} />
                   </button>
@@ -1054,7 +1015,7 @@
 
                 <div className="cart-items-list">
                   {cart.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '50px 20px', color: '#6E6373' }}>
+                    <div style={{ textAlign: 'center', padding: '50px 20px', color: '#6C5B70' }}>
                       <p>Votre panier est vide.</p>
                     </div>
                   ) : (
@@ -1064,18 +1025,18 @@
                         <div className="cart-item-details">
                           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <h4 className="cart-item-title">{item.title}</h4>
-                            <button onClick={() => handleRemoveFromCart(item)} style={{ color: '#9B8F9E' }}>
+                            <button onClick={() => handleRemoveFromCart(item)} style={{ color: '#9B8F9E', background: 'none', border: 'none', cursor: 'pointer' }}>
                               <Icon name="trash-2" size={16} />
                             </button>
                           </div>
-                          <div className="cart-item-meta">{item.installmentText}</div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', alignItems: 'center' }}>
+                          <div className="installment-tag" style={{ fontSize: '0.75rem', marginTop: '2px' }}>{item.installmentText}</div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', alignItems: 'center' }}>
                             <div className="qty-controls">
                               <button className="qty-btn" onClick={() => handleUpdateQty(item, item.quantity - 1)}>-</button>
                               <span>{item.quantity}</span>
                               <button className="qty-btn" onClick={() => handleUpdateQty(item, item.quantity + 1)}>+</button>
                             </div>
-                            <div className="cart-item-price">{(item.price * item.quantity).toLocaleString('fr-FR')} FCFA</div>
+                            <div style={{ fontWeight: 700, color: 'var(--purple-dark)' }}>{(item.price * item.quantity).toLocaleString('fr-FR')} FCFA</div>
                           </div>
                         </div>
                       </div>
@@ -1085,9 +1046,9 @@
 
                 {cart.length > 0 && (
                   <div className="cart-footer">
-                    <div className="summary-row total"><span>Total</span><span>{subtotal.toLocaleString('fr-FR')} FCFA</span></div>
+                    <div className="summary-row"><span>Total</span><span>{subtotal.toLocaleString('fr-FR')} FCFA</span></div>
                     
-                    <button className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '14px' }} onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}>
+                    <button className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}>
                       <span>COMMANDER ({subtotal.toLocaleString('fr-FR')} FCFA)</span>
                       <Icon name="arrow-right" size={18} />
                     </button>
@@ -1115,11 +1076,11 @@
                       </button>
                     </div>
 
-                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', margin: '4px 0 12px 0' }}>{quickViewProduct.title}</h2>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '8px', color: '#68486E' }}>
+                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', margin: '4px 0 12px 0', color: 'var(--purple-dark)' }}>{quickViewProduct.title}</h2>
+                    <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '8px', color: 'var(--purple-dark)' }}>
                       {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
                     </div>
-                    <p style={{ color: '#6E6373', fontSize: '0.9rem', marginBottom: '14px' }}>{quickViewProduct.description}</p>
+                    <p style={{ color: '#6C5B70', fontSize: '0.9rem', marginBottom: '16px' }}>{quickViewProduct.description}</p>
                     
                     <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { handleAddToCart(quickViewProduct); setQuickViewProduct(null); }}>
                       <Icon name="shopping-bag" size={18} />
@@ -1180,7 +1141,7 @@
                       <img src={p.image} alt={p.title} style={{ width: '45px', height: '55px', borderRadius: '6px', objectFit: 'cover' }} />
                       <div>
                         <div style={{ fontWeight: 600 }}>{p.title}</div>
-                        <div style={{ fontSize: '0.85rem', color: '#6E6373' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
+                        <div style={{ fontSize: '0.85rem', color: '#6C5B70' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
                       </div>
                     </div>
                   ))}
@@ -1213,7 +1174,7 @@
                   ) : (
                     <div style={{ textAlign: 'center', padding: '20px 0' }}>
                       <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#27AE60' }}>Commande Enregistrée !</h3>
-                      <p style={{ margin: '12px 0 20px 0', color: '#6E6373' }}>Notre équipe vous contactera directement pour la livraison. Merci d’avoir choisi FDV shopping !</p>
+                      <p style={{ margin: '12px 0 20px 0', color: '#6C5B70' }}>Notre équipe vous contactera directement pour la livraison. Merci d’avoir choisi FDV shopping !</p>
                       <button className="btn-primary" style={{ margin: '0 auto' }} onClick={() => { setCheckoutStep('form'); setIsCheckoutOpen(false); }}>CONTINUER MES ACHATS</button>
                     </div>
                   )}
@@ -1225,8 +1186,8 @@
           {/* FLOATING TOASTS */}
           <div className="toast-container">
             {toasts.map(t => (
-              <div key={t.id} className="toast" style={{ borderColor: t.type === 'error' ? '#E74C3C' : '#68486E' }}>
-                <Icon name={t.type === 'error' ? 'alert-triangle' : 'check'} size={18} color={t.type === 'error' ? '#E74C3C' : '#27AE60'} />
+              <div key={t.id} className="toast">
+                <Icon name={t.type === 'error' ? 'alert-triangle' : 'check'} size={18} color={t.type === 'error' ? '#E74C3C' : '#E2A7B4'} />
                 <span>{t.message}</span>
               </div>
             ))}
