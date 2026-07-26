@@ -82,30 +82,6 @@
       border-color: #68486E;
       background: #F4ECF6;
     }
-
-    /* CLEAN MOBILE STYLES */
-    @media (max-width: 768px) {
-      .announcement-bar {
-        padding: 6px 12px;
-        font-size: 0.72rem;
-      }
-      .brand-logo {
-        gap: 6px;
-      }
-      .brand-logo span:first-child {
-        font-size: 1.3rem;
-      }
-      .brand-subtext {
-        font-size: 0.58rem;
-      }
-      .hero-title {
-        font-size: 2.1rem;
-        line-height: 1.15;
-      }
-      .hero-subtitle {
-        font-size: 0.88rem;
-      }
-    }
   </style>
 </head>
 <body>
@@ -672,27 +648,19 @@
 
       return (
         <div className="app-layout">
-          {/* 1. TOP ANNOUNCEMENT BAR (CLEAN & ELEGANT) */}
+          {/* 1. TOP ANNOUNCEMENT BAR (SINGLE ELEGANT LINE) */}
           <div className="announcement-bar">
             <div className="announcement-content">
-              <div className="announcement-item">
-                <span>Perruques & Mèches Human Hair • Éventails Pagne Wax à 1 700 FCFA</span>
-              </div>
-              <span style={{ opacity: 0.3 }}>|</span>
-              <div className="announcement-item">
-                <span>Paiement à la livraison & Expédition rapide</span>
-              </div>
+              <span>Perruques & Mèches Human Hair • Éventails Pagne Wax (1 700 FCFA) • Paiement à la Livraison</span>
             </div>
           </div>
 
-          {/* 2. MAIN HEADER (CLEAN BRANDING) */}
+          {/* 2. MAIN HEADER (CLEAN ONE-LINE LOGO + ICONS) */}
           <header className="main-header">
             <div className="header-container">
               <a href="#" className="brand-logo" onClick={() => setActiveCategory('Perruques & Mèches')}>
-                <div>
-                  <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, letterSpacing: '1px' }}>FDV shopping</span>
-                  <span className="brand-subtext" style={{ display: 'block', letterSpacing: '2px' }}>BEAUTÉ, PERRUQUES & COUTURE</span>
-                </div>
+                <span className="brand-logo-text">FDV shopping</span>
+                <span className="brand-subtext">BEAUTÉ & COUTURE</span>
               </a>
 
               <nav className="desktop-nav">
@@ -719,22 +687,15 @@
               </nav>
 
               <div className="header-actions">
-                {isAdminAuthenticated && (
-                  <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.78rem' }} onClick={() => setIsAdminFormModalOpen(true)}>
-                    <Icon name="plus-circle" size={14} />
-                    <span>+ Produit</span>
-                  </button>
-                )}
-
                 <button className="icon-btn" onClick={() => setIsSearchOpen(true)} title="Rechercher">
-                  <Icon name="search" size={20} />
+                  <Icon name="search" size={22} color="#2C222E" />
                 </button>
                 <button className="icon-btn" onClick={() => setIsWishlistOpen(true)} title="Favoris">
-                  <Icon name="heart" size={20} />
+                  <Icon name="heart" size={22} color="#2C222E" />
                   {wishlistIds.length > 0 && <span className="icon-badge">{wishlistIds.length}</span>}
                 </button>
                 <button className="icon-btn" onClick={() => setIsCartOpen(true)} title="Panier">
-                  <Icon name="shopping-bag" size={20} />
+                  <Icon name="shopping-bag" size={22} color="#2C222E" />
                   {cart.reduce((a, c) => a + c.quantity, 0) > 0 && (
                     <span className="icon-badge">{cart.reduce((a, c) => a + c.quantity, 0)}</span>
                   )}
@@ -743,7 +704,7 @@
             </div>
           </header>
 
-          {/* 3. HERO BANNER (CLEAN LUXURY MINIMALIST) */}
+          {/* 3. HERO BANNER */}
           <section className="hero-section">
             <div className="hero-glow-1"></div>
             <div className="hero-glow-2"></div>
