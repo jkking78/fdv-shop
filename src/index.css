@@ -13,7 +13,8 @@
   --rose-gold: #E2A7B4;
   --rose-soft: #F7EBEF;
   --gold-accent: #D4AF37;
-  --gold-subtle: #FAF3E0;
+  --whatsapp-green: #25D366;
+  --whatsapp-dark: #128C7E;
   
   --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, blinkmacsystemfont, sans-serif;
@@ -327,6 +328,29 @@ body {
   background: linear-gradient(135deg, #1F1522 0%, var(--purple-dark) 100%);
 }
 
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  border-radius: 40px;
+  background: linear-gradient(135deg, var(--whatsapp-green) 0%, var(--whatsapp-dark) 100%);
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+}
+
 .hero-image-wrapper {
   position: relative;
   display: flex;
@@ -468,6 +492,7 @@ body {
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .product-card:hover {
@@ -495,18 +520,20 @@ body {
   transform: scale(1.06);
 }
 
+/* EDITABLE INDICATIF BADGE (TOP LEFT OF IMAGE) */
 .card-badge {
   position: absolute;
   top: 14px;
   left: 14px;
   background: var(--purple-dark);
   color: #FFFFFF;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 12px;
+  padding: 5px 14px;
+  border-radius: 14px;
   z-index: 2;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .card-badge.new {
@@ -515,6 +542,34 @@ body {
 
 .card-badge.bestseller {
   background: linear-gradient(135deg, #D4AF37 0%, #AA881E 100%);
+}
+
+.card-badge.out-of-stock {
+  background: #E74C3C;
+}
+
+/* STOCK BADGE (TOP RIGHT OF PRICE OR BOTTOM) */
+.stock-pill {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.stock-pill.in-stock {
+  background: #E8F8F5;
+  color: #27AE60;
+}
+
+.stock-pill.low-stock {
+  background: #FEF9E7;
+  color: #F39C12;
+}
+
+.stock-pill.no-stock {
+  background: #FADBD8;
+  color: #E74C3C;
 }
 
 .card-wishlist-btn {
@@ -539,6 +594,30 @@ body {
 .card-wishlist-btn:hover {
   transform: scale(1.1);
   background: #FFFFFF;
+}
+
+.card-edit-btn {
+  position: absolute;
+  top: 14px;
+  right: 56px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.95);
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card-edit-btn:hover {
+  transform: scale(1.1);
+  background: var(--gold-accent);
 }
 
 .card-quick-actions {
@@ -633,8 +712,8 @@ body {
 
 .product-price-row {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
   margin-top: auto;
 }
 
@@ -648,6 +727,29 @@ body {
   font-size: 0.75rem;
   color: var(--text-muted);
   margin-top: 4px;
+}
+
+/* MULTI-IMAGE GALLERY THUMBNAILS */
+.modal-gallery-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.modal-thumb {
+  width: 64px;
+  height: 76px;
+  border-radius: 12px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background: #F4ECF6;
+}
+
+.modal-thumb.active {
+  border-color: var(--purple-accent);
+  transform: scale(1.05);
 }
 
 /* 6. MODALS & DRAWERS */
@@ -669,7 +771,8 @@ body {
   width: 100%;
   max-width: 800px;
   position: relative;
-  overflow: hidden;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(226, 167, 180, 0.3);
   animation: modalPop 0.3s cubic-bezier(0.4, 0, 0.2, 1);

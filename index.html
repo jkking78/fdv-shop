@@ -48,6 +48,7 @@
 
     // SECURE ADMIN PASSWORD (DEFAULT: FDV2026!Admin)
     const ADMIN_SECRET = 'FDV2026!Admin';
+    const WHATSAPP_PHONE = '2250778739527';
 
     // FIREBASE CLOUD CONFIGURATION
     const firebaseConfig = {
@@ -118,11 +119,17 @@
       'trash-2': (
         <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
       ),
+      edit: (
+        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+      ),
       'share-2': (
         <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
       ),
       'upload-cloud': (
         <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+      ),
+      whatsapp: (
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.43-9.874 9.877-9.874 2.637 0 5.116 1.028 6.98 2.893A9.8 9.8 0 0121.854 12c0 5.447-4.429 9.877-9.874 9.877m0-18.177C6.07 3.608 1.48 8.198 1.48 13.8a10.14 10.14 0 001.55 5.42L0 24l4.908-1.288a10.17 10.17 0 005.289 1.474c5.727 0 10.387-4.66 10.387-10.386 0-2.772-1.08-5.378-3.04-7.338A10.3 10.3 0 0012.051 3.608" />
       ),
       check: (
         <path d="M5 13l4 4L19 7" />
@@ -161,14 +168,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Nouveau',
-        rating: 5.0,
-        reviewsCount: 28,
+        stock: 5,
+        images: ['/assets/wigs/bodywave-30.jpg', '/assets/wigs/lisse-30.jpg', '/assets/wigs/deepwave-30.jpg'],
         image: '/assets/wigs/bodywave-30.jpg',
         description: 'Sublime perruque Body Wave taille 30 pouces. Cheveux 100% humains d’une douceur incomparable.',
         fabric: '100% Cheveux Humains Brésilien Premium',
-        care: 'Laver avec shampooing doux et après-shampooing hydratant',
+        care: 'Laver avec shampooing doux',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Naturel', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -179,14 +186,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Top Vente',
-        rating: 4.9,
-        reviewsCount: 35,
+        stock: 12,
+        images: ['/assets/wigs/coupecarre-sdd-12.jpg', '/assets/wigs/coupecarre-12.jpg'],
         image: '/assets/wigs/coupecarre-sdd-12.jpg',
         description: 'Perruque Coupe Carré Super Double Drawn (SDD) taille 12.',
         fabric: 'Super Double Drawn 100% Human Hair',
         care: 'Brosser délicatement',
         sizes: ['Taille 12'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#4A354F' }],
+        colors: [{ name: 'Noir intense', hex: '#4A354F' }],
         isNew: false
       },
       {
@@ -197,14 +204,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Offre Spéciale',
-        rating: 4.8,
-        reviewsCount: 42,
+        stock: 8,
+        images: ['/assets/wigs/coupecarre-12.jpg'],
         image: '/assets/wigs/coupecarre-12.jpg',
         description: 'Coupe Carré classique taille 12 pouces. Style chic, léger.',
         fabric: '100% Cheveux Naturels',
         care: 'Lavage doux',
         sizes: ['Taille 12'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -215,14 +222,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Populaire',
-        rating: 4.9,
-        reviewsCount: 19,
+        stock: 4,
+        images: ['/assets/wigs/coupecarre-16.jpg'],
         image: '/assets/wigs/coupecarre-16.jpg',
         description: 'Coupe Carré mi-longue taille 16.',
         fabric: '100% Cheveux Naturels',
         care: 'Entretien facile',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Brune', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -233,14 +240,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Prix Doux',
-        rating: 4.7,
-        reviewsCount: 31,
+        stock: 6,
+        images: ['/assets/wigs/coupedame.jpg'],
         image: '/assets/wigs/coupedame.jpg',
         description: 'Coupe Dame courte et raffinée.',
         fabric: 'Cheveux Qualité Supérieure',
         care: 'Entretien facile',
         sizes: ['Taille Unique'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#5C3260' }],
+        colors: [{ name: 'Châtain', hex: '#5C3260' }],
         isNew: false
       },
       {
@@ -251,14 +258,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Nouveau',
-        rating: 4.9,
-        reviewsCount: 22,
+        stock: 3,
+        images: ['/assets/wigs/deepwave-16.jpg'],
         image: '/assets/wigs/deepwave-16.jpg',
         description: 'Ondulations profondes Deep Wave taille 16.',
         fabric: '100% Cheveux Humains Ondulés',
         care: 'Spray bouclant',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -269,14 +276,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Luxe VIP',
-        rating: 5.0,
-        reviewsCount: 16,
+        stock: 2,
+        images: ['/assets/wigs/deepwave-30.jpg'],
         image: '/assets/wigs/deepwave-30.jpg',
         description: 'Perruque Deep Wave très longue taille 30.',
         fabric: '100% Cheveux Humains VIP',
         care: 'Démêler aux doigts',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -287,14 +294,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Tendances',
-        rating: 4.8,
-        reviewsCount: 27,
+        stock: 7,
+        images: ['/assets/wigs/frange-12.jpg'],
         image: '/assets/wigs/frange-12.jpg',
         description: 'Perruque avec Frange taille 12 pouces.',
         fabric: '100% Cheveux Naturels',
         care: 'Entretien facile',
         sizes: ['Taille 12'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#4A354F' }],
+        colors: [{ name: 'Noir', hex: '#4A354F' }],
         isNew: false
       },
       {
@@ -305,14 +312,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Nouveau',
-        rating: 4.9,
-        reviewsCount: 15,
+        stock: 5,
+        images: ['/assets/wigs/frange-26.jpg'],
         image: '/assets/wigs/frange-26.jpg',
         description: 'Longueur 26 pouces avec frange droite.',
         fabric: '100% Cheveux Humains',
         care: 'Nourrir avec une huile',
         sizes: ['Taille 26'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: true
       },
       {
@@ -323,14 +330,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Top Vente',
-        rating: 5.0,
-        reviewsCount: 38,
+        stock: 9,
+        images: ['/assets/wigs/lisse-30.jpg'],
         image: '/assets/wigs/lisse-30.jpg',
         description: 'Cheveux extrêmement lisses taille 30 pouces.',
         fabric: '100% Virgin Human Hair Straight',
         care: 'Protéger de la chaleur',
         sizes: ['Taille 30'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -341,14 +348,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Artisanal',
-        rating: 4.8,
-        reviewsCount: 20,
+        stock: 4,
+        images: ['/assets/wigs/waterwave-14.jpg'],
         image: '/assets/wigs/waterwave-14.jpg',
         description: 'Water Wave naturelle taille 14.',
         fabric: '100% Cheveux Humains',
         care: 'Humidifier',
         sizes: ['Taille 14'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: false
       },
       {
@@ -359,14 +366,14 @@
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Nouveau',
-        rating: 4.9,
-        reviewsCount: 24,
+        stock: 6,
+        images: ['/assets/wigs/waterwave-16.jpg'],
         image: '/assets/wigs/waterwave-16.jpg',
         description: 'Water Wave souple taille 16.',
         fabric: '100% Cheveux Humains',
         care: 'Rincer à l’eau tiède',
         sizes: ['Taille 16'],
-        colors: [{ name: 'Plusieurs couleurs disponibles', hex: '#2A172E' }],
+        colors: [{ name: 'Noir', hex: '#2A172E' }],
         isNew: true
       }
     ];
@@ -383,8 +390,8 @@
         currencySymbol: 'FCFA',
         installmentText: 'Prix unitaire: 1 700 FCFA',
         badge: isBestseller ? 'Top Vente' : isNew ? 'Nouveau' : 'Artisanal',
-        rating: (4.8 + (num % 3) * 0.1).toFixed(1),
-        reviewsCount: 15 + num * 3,
+        stock: 10 + (num % 5),
+        images: [`/assets/eventails/eventail-${num}.jpg`],
         image: `/assets/eventails/eventail-${num}.jpg`,
         description: `Éventail pliable fait main en tissu Pagne Wax.`,
         fabric: '100% Pagne Wax Véritable',
@@ -441,16 +448,22 @@
       const [isSearchOpen, setIsSearchOpen] = useState(false);
       const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
       const [quickViewProduct, setQuickViewProduct] = useState(null);
+      const [activeModalImageIdx, setActiveModalImageIdx] = useState(0);
 
-      const [newProduct, setNewProduct] = useState({
+      // EDIT PRODUCT STATE
+      const [editingProduct, setEditingProduct] = useState(null);
+
+      // NEW / EDIT PRODUCT FORM DATA (MAX 4 IMAGES)
+      const [productFormData, setProductFormData] = useState({
+        id: null,
         title: '',
         category: 'Perruques & Mèches',
         price: '',
-        image: '',
-        imagePreview: null,
-        description: '',
+        stock: 5,
         badge: 'Nouveau',
-        installmentText: 'Disponible en plusieurs couleurs'
+        installmentText: 'Disponible en plusieurs couleurs',
+        description: '',
+        images: []
       });
 
       useEffect(() => {
@@ -481,25 +494,44 @@
         }, 3500);
       };
 
-      const handleImageFileChange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
+      const handleMultiImageFileChange = (e) => {
+        const files = Array.from(e.target.files || []);
+        if (files.length === 0) return;
 
-        if (!file.type.startsWith('image/')) {
-          addToast('Veuillez sélectionner un fichier image valide.', 'error');
+        const currentImages = productFormData.images || [];
+        const availableSlots = 4 - currentImages.length;
+        if (availableSlots <= 0) {
+          addToast('Maximum 4 photos par article.', 'error');
           return;
         }
 
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          setNewProduct(prev => ({
-            ...prev,
-            image: event.target.result,
-            imagePreview: event.target.result
-          }));
-          addToast('Photo chargée !', 'info');
-        };
-        reader.readAsDataURL(file);
+        const filesToProcess = files.slice(0, availableSlots);
+        let loadedCount = 0;
+        const newImgs = [...currentImages];
+
+        filesToProcess.forEach(file => {
+          if (!file.type.startsWith('image/')) return;
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            newImgs.push(event.target.result);
+            loadedCount++;
+            if (loadedCount === filesToProcess.length) {
+              setProductFormData(prev => ({
+                ...prev,
+                images: newImgs
+              }));
+              addToast(`${loadedCount} photo(s) ajoutée(s) !`, 'info');
+            }
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+
+      const handleRemoveFormImage = (indexToRemove) => {
+        setProductFormData(prev => ({
+          ...prev,
+          images: prev.images.filter((_, idx) => idx !== indexToRemove)
+        }));
       };
 
       const handleVerifyAdminAuth = (e) => {
@@ -521,29 +553,70 @@
         setIsAdminAuthenticated(false);
         sessionStorage.removeItem('fdv_admin_auth');
         setIsAdminFormModalOpen(false);
+        setEditingProduct(null);
         addToast('Déconnexion effectuée.', 'info');
       };
 
-      const handleAddCustomProduct = (e) => {
+      const handleOpenEditProduct = (product, e) => {
+        if (e) e.stopPropagation();
+        setEditingProduct(product);
+        setProductFormData({
+          id: product.id,
+          title: product.title || '',
+          category: product.category || 'Perruques & Mèches',
+          price: product.price || '',
+          stock: product.stock !== undefined ? product.stock : 5,
+          badge: product.badge || 'Nouveau',
+          installmentText: product.installmentText || 'Disponible en plusieurs couleurs',
+          description: product.description || '',
+          images: product.images && product.images.length > 0 ? [...product.images] : [product.image]
+        });
+        setIsAdminFormModalOpen(true);
+      };
+
+      const handleOpenNewProduct = () => {
+        setEditingProduct(null);
+        setProductFormData({
+          id: null,
+          title: '',
+          category: 'Perruques & Mèches',
+          price: '',
+          stock: 5,
+          badge: 'Nouveau',
+          installmentText: 'Disponible en plusieurs couleurs',
+          description: '',
+          images: []
+        });
+        setIsAdminFormModalOpen(true);
+      };
+
+      const handleSaveProduct = (e) => {
         e.preventDefault();
         if (!isAdminAuthenticated) return;
-        if (!newProduct.title || !newProduct.price) return;
+        if (!productFormData.title || !productFormData.price) return;
 
-        const cleanTitle = sanitizeText(newProduct.title);
-        const cleanDesc = sanitizeText(newProduct.description);
+        const cleanTitle = sanitizeText(productFormData.title);
+        const cleanDesc = sanitizeText(productFormData.description);
+        const cleanBadge = sanitizeText(productFormData.badge);
 
-        const createdProd = {
-          id: `cloud-${Date.now()}`,
+        const imgList = productFormData.images && productFormData.images.length > 0
+          ? productFormData.images
+          : ['/assets/wigs/bodywave-30.jpg'];
+
+        const productPayload = {
+          id: editingProduct ? editingProduct.id : `cloud-${Date.now()}`,
           title: cleanTitle,
-          category: newProduct.category,
-          price: Math.abs(parseFloat(newProduct.price)) || 0,
+          category: productFormData.category,
+          price: Math.abs(parseFloat(productFormData.price)) || 0,
           currencySymbol: 'FCFA',
-          installmentText: newProduct.installmentText || 'Produit en Stock',
-          badge: newProduct.badge || 'Nouveau',
+          stock: Math.max(0, parseInt(productFormData.stock, 10) || 0),
+          installmentText: productFormData.installmentText || 'Produit en Stock',
+          badge: cleanBadge || 'Nouveau',
           rating: '5.0',
-          reviewsCount: 1,
-          image: newProduct.image || '/assets/wigs/bodywave-30.jpg',
-          description: cleanDesc || 'Nouveau produit FDV shopping.',
+          reviewsCount: editingProduct ? editingProduct.reviewsCount : 1,
+          images: imgList,
+          image: imgList[0],
+          description: cleanDesc || 'Produit FDV shopping.',
           fabric: 'Qualité Supérieure',
           care: 'Entretien recommandé',
           sizes: ['Taille Unique'],
@@ -553,21 +626,27 @@
 
         if (db && isFirebaseActive) {
           try {
-            db.collection('products').doc(createdProd.id).set(createdProd);
+            db.collection('products').doc(productPayload.id).set(productPayload);
           } catch(err) {}
         }
 
-        const updated = [createdProd, ...productsList];
-        setProductsList(updated);
+        let updatedList = [];
+        if (editingProduct) {
+          updatedList = productsList.map(p => p.id === productPayload.id ? productPayload : p);
+          addToast(`Article "${cleanTitle}" mis à jour !`, 'info');
+        } else {
+          updatedList = [productPayload, ...productsList];
+          addToast(`Article "${cleanTitle}" créé !`, 'info');
+        }
 
-        const customItemsOnly = updated.filter(p => p.id.startsWith('custom-') || p.id.startsWith('cloud-'));
+        setProductsList(updatedList);
+
+        const customItemsOnly = updatedList.filter(p => p.id.startsWith('custom-') || p.id.startsWith('cloud-'));
         localStorage.setItem('fdv_custom_products', JSON.stringify(customItemsOnly));
 
-        addToast(`Article "${cleanTitle}" publié !`, 'info');
-        setNewProduct({ title: '', category: 'Perruques & Mèches', price: '', image: '', imagePreview: null, description: '', badge: 'Nouveau', installmentText: 'Disponible en plusieurs couleurs' });
         setIsAdminFormModalOpen(false);
-        setActiveCategory(createdProd.category);
-        document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
+        setEditingProduct(null);
+        setActiveCategory(productPayload.category);
       };
 
       const handleDeleteProduct = (productId) => {
@@ -583,6 +662,26 @@
         const customItemsOnly = updated.filter(p => p.id.startsWith('custom-') || p.id.startsWith('cloud-'));
         localStorage.setItem('fdv_custom_products', JSON.stringify(customItemsOnly));
         addToast('Produit supprimé.', 'info');
+        setIsAdminFormModalOpen(false);
+      };
+
+      // WHATSAPP REDIRECTION SYSTEM
+      const handleOrderOnWhatsApp = (cartItems, clientInfo = {}) => {
+        let msg = `Bonjour FDV shopping ! Je souhaite commander les articles suivants :\n\n`;
+        cartItems.forEach((item, idx) => {
+          msg += `${idx + 1}. *${item.title}*\n   - Quantité: ${item.quantity}\n   - Prix: ${(item.price * item.quantity).toLocaleString('fr-FR')} FCFA\n\n`;
+        });
+        const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0);
+        msg += `💰 *TOTAL À REGLER : ${total.toLocaleString('fr-FR')} FCFA*\n\n`;
+
+        if (clientInfo.name) msg += `👤 Nom Client: ${clientInfo.name}\n`;
+        if (clientInfo.address) msg += `📍 Adresse/Ville de livraison: ${clientInfo.address}\n`;
+
+        msg += `\nMerci d'avance pour la confirmation de ma commande !`;
+
+        const encodedMsg = encodeURIComponent(msg);
+        const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodedMsg}`;
+        window.open(waUrl, '_blank');
       };
 
       const filteredProducts = productsList.filter(p => {
@@ -593,6 +692,10 @@
 
       const handleAddToCart = (productToAdd, e) => {
         if (e) e.stopPropagation();
+        if (productToAdd.stock === 0) {
+          addToast(`Cet article est actuellement en rupture de stock.`, 'error');
+          return;
+        }
         const size = productToAdd.selectedSize || productToAdd.sizes?.[0] || 'Unique';
         const color = productToAdd.selectedColor || (productToAdd.colors?.[0] ? productToAdd.colors[0].name : 'Unique');
         const qty = productToAdd.quantity || 1;
@@ -648,11 +751,11 @@
           {/* 1. TOP ANNOUNCEMENT BAR */}
           <div className="announcement-bar">
             <div className="announcement-content">
-              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) <span className="announcement-badge">FDV10</span></span>
+              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) • WhatsApp: 07 78 73 95 27 <span className="announcement-badge">FDV10</span></span>
             </div>
           </div>
 
-          {/* 2. MAIN HEADER (ALWAYS VISIBLE ICON BUTTONS) */}
+          {/* 2. MAIN HEADER */}
           <header className="main-header">
             <div className="header-container">
               <a href="#" className="brand-logo" onClick={() => setActiveCategory('Perruques & Mèches')}>
@@ -722,16 +825,26 @@
                 <p className="hero-subtitle">
                   Cheveux 100% humains, Body Wave, Deep Wave, Lisse & Coupe Carré. Éventails en Pagne fait main.
                 </p>
-                <button
-                  className="btn-primary"
-                  onClick={() => {
-                    setActiveCategory('Perruques & Mèches');
-                    document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  <span>EXPLORER LA COLLECTION</span>
-                  <Icon name="arrow-right" size={18} color="#FFFFFF" />
-                </button>
+                <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                  <button
+                    className="btn-primary"
+                    onClick={() => {
+                      setActiveCategory('Perruques & Mèches');
+                      document.getElementById('featured-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                  >
+                    <span>EXPLORER LA COLLECTION</span>
+                    <Icon name="arrow-right" size={18} color="#FFFFFF" />
+                  </button>
+                  <a
+                    href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent('Bonjour FDV shopping, je souhaite avoir des informations sur vos perruques et éventails.')}`}
+                    target="_blank"
+                    className="btn-whatsapp"
+                  >
+                    <Icon name="whatsapp" size={20} color="#FFFFFF" />
+                    <span>WhatsApp 07 78 73 95 27</span>
+                  </a>
+                </div>
               </div>
 
               <div className="hero-image-wrapper">
@@ -754,7 +867,7 @@
                 <h2 className="section-title">Catalogue {activeCategory}</h2>
               </div>
               {isAdminAuthenticated && (
-                <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={() => setIsAdminFormModalOpen(true)}>
+                <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={handleOpenNewProduct}>
                   <Icon name="plus-circle" size={16} color="#FFFFFF" />
                   <span>+ Ajouter un Produit</span>
                 </button>
@@ -776,36 +889,26 @@
             <div className="product-grid">
               {filteredProducts.map(product => {
                 const isWishlisted = wishlistIds.includes(product.id);
-                const isCustom = product.id.startsWith('custom-') || product.id.startsWith('cloud-');
+                const isOutOfStock = product.stock === 0;
+                const displayImage = (product.images && product.images.length > 0) ? product.images[0] : product.image;
                 return (
                   <div key={product.id} className="product-card">
                     <div className="product-image-box">
+                      {/* EDITABLE INDICATIF BADGE AT TOP LEFT */}
                       {product.badge && (
-                        <span className={`card-badge ${product.badge === 'Nouveau' ? 'new' : product.badge === 'Top Vente' ? 'bestseller' : ''}`}>
-                          {product.badge}
+                        <span className={`card-badge ${isOutOfStock ? 'out-of-stock' : product.badge === 'Nouveau' ? 'new' : product.badge === 'Top Vente' ? 'bestseller' : ''}`}>
+                          {isOutOfStock ? 'Rupture de stock' : product.badge}
                         </span>
                       )}
 
-                      {isCustom && isAdminAuthenticated && (
+                      {/* CLIENT EDIT BUTTON (GOLD PENCIL) AT TOP RIGHT WHEN LOGGED IN */}
+                      {isAdminAuthenticated && (
                         <button
-                          onClick={() => handleDeleteProduct(product.id)}
-                          style={{
-                            position: 'absolute',
-                            top: '14px',
-                            left: '14px',
-                            background: '#E74C3C',
-                            color: '#FFF',
-                            borderRadius: '50%',
-                            width: '28px',
-                            height: '28px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            zIndex: 3
-                          }}
-                          title="Supprimer ce produit"
+                          className="card-edit-btn"
+                          onClick={(e) => handleOpenEditProduct(product, e)}
+                          title="Modifier les infos de cet article"
                         >
-                          <Icon name="trash-2" size={14} color="#FFFFFF" />
+                          <Icon name="edit" size={16} color="#FFFFFF" />
                         </button>
                       )}
 
@@ -817,14 +920,14 @@
                         <Icon name="heart" size={18} fill={isWishlisted ? '#E2A7B4' : 'none'} color={isWishlisted ? '#E2A7B4' : '#6C5B70'} />
                       </button>
 
-                      <img src={product.image} alt={product.title} loading="lazy" />
+                      <img src={displayImage} alt={product.title} loading="lazy" />
 
                       <div className="card-quick-actions">
-                        <button className="btn-add-cart" onClick={(e) => handleAddToCart(product, e)}>
+                        <button className="btn-add-cart" onClick={(e) => handleAddToCart(product, e)} disabled={isOutOfStock}>
                           <Icon name="shopping-bag" size={16} color="#FFFFFF" />
-                          <span>Ajouter au panier</span>
+                          <span>{isOutOfStock ? 'Rupture' : 'Ajouter au panier'}</span>
                         </button>
-                        <button className="btn-quick-view" onClick={() => setQuickViewProduct(product)} title="Aperçu">
+                        <button className="btn-quick-view" onClick={() => { setQuickViewProduct(product); setActiveModalImageIdx(0); }} title="Aperçu">
                           <Icon name="eye" size={18} color="#2A172E" />
                         </button>
                       </div>
@@ -832,11 +935,14 @@
 
                     <div className="product-info">
                       <span className="product-category">{product.category}</span>
-                      <a href="#" className="product-title-link" onClick={(e) => { e.preventDefault(); setQuickViewProduct(product); }}>
+                      <a href="#" className="product-title-link" onClick={(e) => { e.preventDefault(); setQuickViewProduct(product); setActiveModalImageIdx(0); }}>
                         {product.title}
                       </a>
                       <div className="product-price-row">
                         <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
+                        <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
+                          {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
+                        </span>
                       </div>
                       {product.installmentText && <span className="installment-tag">{product.installmentText}</span>}
                     </div>
@@ -882,34 +988,43 @@
             </div>
           )}
 
-          {/* 6. ADMIN PRODUCT FORM MODAL */}
+          {/* 6. ADMIN PRODUCT FORM MODAL (ADD & EDIT WITH UP TO 4 IMAGES & STOCK & BADGE) */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '540px' }} onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '580px' }} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={() => setIsAdminFormModalOpen(false)}>
                   <Icon name="x" size={20} color="#2A172E" />
                 </button>
                 <div style={{ padding: '32px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                     <div>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E' }}>Ajouter un Produit</h3>
-                      <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Session Administrateur Active</p>
+                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E' }}>
+                        {editingProduct ? 'Modifier l’Article' : 'Ajouter un Produit'}
+                      </h3>
+                      <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Session Propriétaire Active</p>
                     </div>
-                    <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', padding: '4px 10px', borderRadius: '12px' }}>
-                      Déconnexion
-                    </button>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      {editingProduct && (
+                        <button onClick={() => handleDeleteProduct(editingProduct.id)} style={{ fontSize: '0.75rem', color: '#FFF', background: '#E74C3C', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer', fontWeight: 600 }}>
+                          Supprimer
+                        </button>
+                      )}
+                      <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer' }}>
+                        Déconnexion
+                      </button>
+                    </div>
                   </div>
 
-                  <form onSubmit={handleAddCustomProduct} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <form onSubmit={handleSaveProduct} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <div>
                       <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                        Nom / Titre du Produit *
+                        Titre / Nom de l'Article *
                       </label>
                       <input
                         type="text"
-                        placeholder="ex: Perruque HD Lace 24 Pouces"
-                        value={newProduct.title}
-                        onChange={(e) => setNewProduct({ ...newProduct, title: e.target.value })}
+                        placeholder="ex: Perruque Body Wave Taille 30"
+                        value={productFormData.title}
+                        onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
                         className="newsletter-input"
                         style={{ width: '100%' }}
                         required
@@ -922,8 +1037,8 @@
                           Catégorie *
                         </label>
                         <select
-                          value={newProduct.category}
-                          onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
+                          value={productFormData.category}
+                          onChange={(e) => setProductFormData({ ...productFormData, category: e.target.value })}
                           className="newsletter-input"
                           style={{ width: '100%', padding: '12px' }}
                         >
@@ -940,9 +1055,9 @@
                         </label>
                         <input
                           type="number"
-                          placeholder="ex: 35000"
-                          value={newProduct.price}
-                          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                          placeholder="ex: 65000"
+                          value={productFormData.price}
+                          onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
                           className="newsletter-input"
                           style={{ width: '100%' }}
                           required
@@ -950,34 +1065,78 @@
                       </div>
                     </div>
 
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
+                          Nombre de Stock Disponible *
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="ex: 10"
+                          value={productFormData.stock}
+                          onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
+                          className="newsletter-input"
+                          style={{ width: '100%' }}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
+                          Indicatif en Haut à Gauche (Badge)
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="ex: Top Vente, Nouveau, -20%, Luxe VIP"
+                          value={productFormData.badge}
+                          onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
+                          className="newsletter-input"
+                          style={{ width: '100%' }}
+                        />
+                      </div>
+                    </div>
+
                     <div>
                       <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '6px' }}>
-                        Photo du Produit *
+                        Photos de l'Article (Maximum 4 Photos) *
                       </label>
                       
-                      <label className="file-upload-zone">
-                        <Icon name="upload-cloud" size={26} color="#5C3260" />
-                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#5C3260' }}>
-                          📷 Choisir une Photo (JPG, PNG)
-                        </span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageFileChange}
-                          style={{ display: 'none' }}
-                        />
-                      </label>
-
-                      {newProduct.imagePreview && (
-                        <div style={{ marginTop: '12px', textAlign: 'center', background: '#FAF6FA', padding: '10px', borderRadius: '14px' }}>
-                          <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '6px' }}>
-                            ✓ Aperçu de la photo :
+                      {productFormData.images.length < 4 && (
+                        <label className="file-upload-zone">
+                          <Icon name="upload-cloud" size={26} color="#5C3260" />
+                          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#5C3260' }}>
+                            📷 Sélectionner des Photos (Max 4 photos)
                           </span>
-                          <img
-                            src={newProduct.imagePreview}
-                            alt="Aperçu"
-                            style={{ maxHeight: '120px', borderRadius: '10px', objectFit: 'cover' }}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={handleMultiImageFileChange}
+                            style={{ display: 'none' }}
                           />
+                        </label>
+                      )}
+
+                      {productFormData.images.length > 0 && (
+                        <div style={{ marginTop: '12px' }}>
+                          <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
+                            ✓ Photos sélectionnées ({productFormData.images.length}/4) :
+                          </span>
+                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                            {productFormData.images.map((imgSrc, idx) => (
+                              <div key={idx} style={{ position: 'relative', width: '80px', height: '90px' }}>
+                                <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover' }} />
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveFormImage(idx)}
+                                  style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '0.7rem' }}
+                                >
+                                  ✕
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -987,16 +1146,16 @@
                         Description
                       </label>
                       <textarea
-                        placeholder="Description du produit..."
-                        value={newProduct.description}
-                        onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                        placeholder="Description complète du produit..."
+                        value={productFormData.description}
+                        onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
                         className="newsletter-input"
                         style={{ width: '100%', height: '70px', borderRadius: '14px', resize: 'none' }}
                       />
                     </div>
 
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '6px' }}>
-                      <span>PUBLIER LE PRODUIT</span>
+                      <span>ENREGISTRER ET PUBLIER</span>
                     </button>
                   </form>
                 </div>
@@ -1012,7 +1171,7 @@
                   <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700 }}>FDV shopping</span>
                 </div>
                 <p className="footer-desc">
-                  Perruques, Mèches Human Hair & Éventails en Pagne de haute facture. Célébrez votre beauté au quotidien.
+                  Perruques, Mèches Human Hair & Éventails en Pagne de haute facture. Commandes WhatsApp au 07 78 73 95 27.
                 </p>
               </div>
               <div>
@@ -1027,7 +1186,7 @@
                 <ul className="footer-links">
                   <li>
                     {isAdminAuthenticated ? (
-                      <button onClick={() => setIsAdminFormModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, color: '#27AE60', fontWeight: 700 }}>
+                      <button onClick={handleOpenNewProduct} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, color: '#27AE60', fontWeight: 700 }}>
                         🔒 Gérer la boutique (Connecté)
                       </button>
                     ) : (
@@ -1040,11 +1199,11 @@
               </div>
             </div>
             <div className="footer-bottom">
-              <div>© 2026 FDV shopping. Tous droits réservés.</div>
+              <div>© 2026 FDV shopping. WhatsApp Direct : 07 78 73 95 27</div>
             </div>
           </footer>
 
-          {/* SLIDE-OVER CART DRAWER */}
+          {/* SLIDE-OVER CART DRAWER WITH WHATSAPP ORDER BUTTON */}
           {isCartOpen && (
             <>
               <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>
@@ -1091,9 +1250,13 @@
                   <div className="cart-footer">
                     <div className="summary-row"><span>Total</span><span>{subtotal.toLocaleString('fr-FR')} FCFA</span></div>
                     
-                    <button className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }} onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}>
-                      <span>COMMANDER ({subtotal.toLocaleString('fr-FR')} FCFA)</span>
-                      <Icon name="arrow-right" size={18} color="#FFFFFF" />
+                    <button
+                      className="btn-whatsapp"
+                      style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }}
+                      onClick={() => handleOrderOnWhatsApp(cart)}
+                    >
+                      <Icon name="whatsapp" size={22} color="#FFFFFF" />
+                      <span>COMMANDER SUR WHATSAPP (07 78 73 95 27)</span>
                     </button>
                   </div>
                 )}
@@ -1101,7 +1264,7 @@
             </>
           )}
 
-          {/* QUICK VIEW MODAL */}
+          {/* QUICK VIEW MODAL (SUPPORTING UP TO 4 IMAGES) */}
           {quickViewProduct && (
             <div className="modal-overlay" onClick={() => setQuickViewProduct(null)}>
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -1109,26 +1272,75 @@
                   <Icon name="x" size={20} color="#2A172E" />
                 </button>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', padding: '32px' }}>
-                  <img src={quickViewProduct.image} alt={quickViewProduct.title} style={{ width: '100%', borderRadius: '20px', objectFit: 'cover' }} />
+                  <div>
+                    {(() => {
+                      const allImgs = (quickViewProduct.images && quickViewProduct.images.length > 0)
+                        ? quickViewProduct.images
+                        : [quickViewProduct.image];
+                      const mainImg = allImgs[activeModalImageIdx] || allImgs[0];
+                      return (
+                        <>
+                          <img src={mainImg} alt={quickViewProduct.title} style={{ width: '100%', height: '340px', borderRadius: '20px', objectFit: 'cover' }} />
+                          {allImgs.length > 1 && (
+                            <div className="modal-gallery-thumbs">
+                              {allImgs.map((imgSrc, idx) => (
+                                <img
+                                  key={idx}
+                                  src={imgSrc}
+                                  alt={`Vignette ${idx+1}`}
+                                  className={`modal-thumb ${activeModalImageIdx === idx ? 'active' : ''}`}
+                                  onClick={() => setActiveModalImageIdx(idx)}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+
                   <div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span className="product-category">{quickViewProduct.category}</span>
                       <button className="fb-share-btn" onClick={() => handleShareOnFacebook(quickViewProduct)}>
                         <Icon name="share-2" size={14} color="#FFFFFF" />
-                        <span>Partager sur Facebook</span>
+                        <span>Partager</span>
                       </button>
                     </div>
 
                     <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', margin: '4px 0 12px 0', color: 'var(--purple-dark)' }}>{quickViewProduct.title}</h2>
-                    <div style={{ fontSize: '1.8rem', fontWeight: 700, marginBottom: '8px', color: 'var(--purple-dark)' }}>
-                      {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
-                    </div>
-                    <p style={{ color: '#6C5B70', fontSize: '0.9rem', marginBottom: '16px' }}>{quickViewProduct.description}</p>
                     
-                    <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { handleAddToCart(quickViewProduct); setQuickViewProduct(null); }}>
-                      <Icon name="shopping-bag" size={18} color="#FFFFFF" />
-                      <span>AJOUTER AU PANIER</span>
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                      <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
+                        {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
+                      </div>
+                      <span className={`stock-pill ${quickViewProduct.stock === 0 ? 'no-stock' : quickViewProduct.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
+                        {quickViewProduct.stock === 0 ? 'Épuisé' : `${quickViewProduct.stock} disponible(s)`}
+                      </span>
+                    </div>
+
+                    <p style={{ color: '#6C5B70', fontSize: '0.9rem', marginBottom: '20px' }}>{quickViewProduct.description}</p>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <button
+                        className="btn-whatsapp"
+                        style={{ width: '100%', justifyContent: 'center' }}
+                        onClick={() => handleOrderOnWhatsApp([{ ...quickViewProduct, quantity: 1 }])}
+                      >
+                        <Icon name="whatsapp" size={20} color="#FFFFFF" />
+                        <span>Commander cet article sur WhatsApp</span>
+                      </button>
+
+                      <button
+                        className="btn-primary"
+                        style={{ width: '100%', justifyContent: 'center' }}
+                        onClick={() => { handleAddToCart(quickViewProduct); setQuickViewProduct(null); }}
+                        disabled={quickViewProduct.stock === 0}
+                      >
+                        <Icon name="shopping-bag" size={18} color="#FFFFFF" />
+                        <span>{quickViewProduct.stock === 0 ? 'Article Épuisé' : 'Ajouter au Panier'}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1188,39 +1400,6 @@
                       </div>
                     </div>
                   ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* CHECKOUT MODAL */}
-          {isCheckoutOpen && (
-            <div className="modal-overlay" onClick={() => setIsCheckoutOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '580px' }} onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={() => setIsCheckoutOpen(false)}>
-                  <Icon name="x" size={20} color="#2A172E" />
-                </button>
-                <div style={{ padding: '32px' }}>
-                  {checkoutStep === 'form' ? (
-                    <form onSubmit={(e) => { e.preventDefault(); setCheckoutStep('success'); setCart([]); }}>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', marginBottom: '16px' }}>Valider Ma Commande</h3>
-                      <div style={{ background: '#FAF6FA', padding: '12px', borderRadius: '12px', marginBottom: '16px', fontWeight: 700 }}>
-                        Total à régler: {subtotal.toLocaleString('fr-FR')} FCFA
-                      </div>
-                      <input type="text" placeholder="Nom & Prénom" className="newsletter-input" style={{ width: '100%', marginBottom: '10px' }} required />
-                      <input type="tel" placeholder="Numéro de Téléphone / WhatsApp" className="newsletter-input" style={{ width: '100%', marginBottom: '10px' }} required />
-                      <input type="text" placeholder="Adresse ou Ville de Livraison" className="newsletter-input" style={{ width: '100%', marginBottom: '16px' }} required />
-                      <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                        <span>CONFIRMER LA COMMANDE ({subtotal.toLocaleString('fr-FR')} FCFA)</span>
-                      </button>
-                    </form>
-                  ) : (
-                    <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '2rem', color: '#27AE60' }}>Commande Enregistrée !</h3>
-                      <p style={{ margin: '12px 0 20px 0', color: '#6C5B70' }}>Notre équipe vous contactera directement pour la livraison. Merci d’avoir choisi FDV shopping !</p>
-                      <button className="btn-primary" style={{ margin: '0 auto' }} onClick={() => { setCheckoutStep('form'); setIsCheckoutOpen(false); }}>CONTINUER MES ACHATS</button>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
