@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FDV shopping | Perruques & Mèches, Éventails en Pagne & Mode</title>
-  <meta name="description" content="Découvrez FDV shopping : Perruques Body Wave, Deep Wave, Coupe Carré 100% Cheveux Humains et Éventails en Pagne Wax à 1 700 FCFA." />
+  <title>FDV shopping | Perruques, Mèches & Éventails en Pagne</title>
+  <meta name="description" content="FDV shopping : Perruques Body Wave, Deep Wave 100% Cheveux Humains et Éventails en Pagne Wax à 1 700 FCFA." />
   
   <!-- FACEBOOK / META COMMERCE OPEN GRAPH META TAGS -->
   <meta property="og:site_name" content="FDV shopping" />
@@ -65,31 +65,6 @@
       background: #145DBF;
     }
 
-    .admin-badge-authenticated {
-      background: #27AE60;
-      color: #FFF;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .cloud-badge {
-      background: rgba(39, 174, 96, 0.12);
-      color: #27AE60;
-      border: 1px solid rgba(39, 174, 96, 0.3);
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .file-upload-zone {
       border: 2px dashed #D8C3DD;
       border-radius: 16px;
@@ -107,6 +82,30 @@
       border-color: #68486E;
       background: #F4ECF6;
     }
+
+    /* CLEAN MOBILE STYLES */
+    @media (max-width: 768px) {
+      .announcement-bar {
+        padding: 6px 12px;
+        font-size: 0.72rem;
+      }
+      .brand-logo {
+        gap: 6px;
+      }
+      .brand-logo span:first-child {
+        font-size: 1.3rem;
+      }
+      .brand-subtext {
+        font-size: 0.58rem;
+      }
+      .hero-title {
+        font-size: 2.1rem;
+        line-height: 1.15;
+      }
+      .hero-subtitle {
+        font-size: 0.88rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -119,7 +118,7 @@
     // SECURE ADMIN PASSWORD (DEFAULT: FDV2026!Admin)
     const ADMIN_SECRET = 'FDV2026!Admin';
 
-    // FIREBASE CLOUD CONFIGURATION (DEMO / REALTIME READY)
+    // FIREBASE CLOUD CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyFDV_SHOPPING_PROD_KEY",
       authDomain: "fdv-shopping-prod.firebaseapp.com",
@@ -129,7 +128,6 @@
       appId: "1:987654321012:web:fdvshopping123456"
     };
 
-    // Initialize Firebase Cloud if available
     let db = null;
     let isFirebaseActive = false;
     try {
@@ -139,10 +137,9 @@
         isFirebaseActive = true;
       }
     } catch (e) {
-      console.log('Firebase Cloud initialized in local offline sync mode.');
+      console.log('Local Mode');
     }
 
-    // Helper XSS Input Sanitizer
     const sanitizeText = (str) => {
       if (!str) return '';
       return String(str)
@@ -157,7 +154,7 @@
     const Icon = ({ name, size = 20, color = 'currentColor', fill = 'none', className = '', style = {} }) => {
       const LucideIcon = window.lucide ? window.lucide.icons[name] : null;
       if (!LucideIcon) {
-        return <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: size, height: size, ...style }}>✨</span>;
+        return null;
       }
       return (
         <svg
@@ -436,7 +433,6 @@
 
     // --- MAIN APP ---
     function App() {
-      // Products List State
       const [productsList, setProductsList] = useState(() => {
         const saved = localStorage.getItem('fdv_custom_products');
         if (saved) {
@@ -461,7 +457,6 @@
       const [wishlistIds, setWishlistIds] = useState(['wig-1', 'eventail-1']);
       const [toasts, setToasts] = useState([]);
 
-      // Security / Admin Authentication State
       const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
         return sessionStorage.getItem('fdv_admin_auth') === 'true';
       });
@@ -469,14 +464,12 @@
       const [isAdminAuthModalOpen, setIsAdminAuthModalOpen] = useState(false);
       const [isAdminFormModalOpen, setIsAdminFormModalOpen] = useState(false);
 
-      // Other Modals
       const [isCartOpen, setIsCartOpen] = useState(false);
       const [isWishlistOpen, setIsWishlistOpen] = useState(false);
       const [isSearchOpen, setIsSearchOpen] = useState(false);
       const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
       const [quickViewProduct, setQuickViewProduct] = useState(null);
 
-      // Admin New Product Form State
       const [newProduct, setNewProduct] = useState({
         title: '',
         category: 'Perruques & Mèches',
@@ -488,7 +481,6 @@
         installmentText: 'Disponible en plusieurs couleurs'
       });
 
-      // Firebase Firestore Realtime Subscription (Sync Cloud)
       useEffect(() => {
         if (db && isFirebaseActive) {
           const unsubscribe = db.collection('products').onSnapshot(snapshot => {
@@ -503,9 +495,7 @@
                 return [...cloudItems, ...nonCloud];
               });
             }
-          }, err => {
-            console.log('Realtime Cloud Sync Active (Local Mode)');
-          });
+          }, err => {});
 
           return () => unsubscribe && unsubscribe();
         }
@@ -519,13 +509,12 @@
         }, 3500);
       };
 
-      // Handle Image File Selection (Local Photo Upload)
       const handleImageFileChange = (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-          addToast('Veuillez sélectionner un fichier image valide (JPG, PNG, WEBP).', 'error');
+          addToast('Veuillez sélectionner un fichier image valide.', 'error');
           return;
         }
 
@@ -536,12 +525,11 @@
             image: event.target.result,
             imagePreview: event.target.result
           }));
-          addToast('Photo chargée avec succès !', 'info');
+          addToast('Photo chargée !', 'info');
         };
         reader.readAsDataURL(file);
       };
 
-      // Handle Admin Password Verification
       const handleVerifyAdminAuth = (e) => {
         e.preventDefault();
         if (adminPasswordInput === ADMIN_SECRET) {
@@ -550,9 +538,9 @@
           setIsAdminAuthModalOpen(false);
           setIsAdminFormModalOpen(true);
           setAdminPasswordInput('');
-          addToast('Accès Administrateur Déverrouillé avec Succès ! 🔒', 'info');
+          addToast('Connexion administrateur réussie.', 'info');
         } else {
-          addToast('Code d’accès incorrect. Accès refusé.', 'error');
+          addToast('Code d’accès incorrect.', 'error');
           setAdminPasswordInput('');
         }
       };
@@ -561,16 +549,12 @@
         setIsAdminAuthenticated(false);
         sessionStorage.removeItem('fdv_admin_auth');
         setIsAdminFormModalOpen(false);
-        addToast('Déconnexion de l’Espace Administration.', 'info');
+        addToast('Déconnexion effectuée.', 'info');
       };
 
       const handleAddCustomProduct = (e) => {
         e.preventDefault();
-        if (!isAdminAuthenticated) {
-          addToast('Accès non autorisé !', 'error');
-          return;
-        }
-
+        if (!isAdminAuthenticated) return;
         if (!newProduct.title || !newProduct.price) return;
 
         const cleanTitle = sanitizeText(newProduct.title);
@@ -587,21 +571,18 @@
           rating: '5.0',
           reviewsCount: 1,
           image: newProduct.image || '/assets/wigs/bodywave-30.jpg',
-          description: cleanDesc || 'Nouveau produit certifié par la boutique FDV shopping.',
-          fabric: 'Haute Qualité FDV',
-          care: 'Entretien selon étiquette',
+          description: cleanDesc || 'Nouveau produit FDV shopping.',
+          fabric: 'Qualité Supérieure',
+          care: 'Entretien recommandé',
           sizes: ['Taille Unique'],
           colors: [{ name: 'Couleur Unique', hex: '#68486E' }],
           isNew: true
         };
 
-        // Push to Firebase Cloud if active
         if (db && isFirebaseActive) {
           try {
             db.collection('products').doc(createdProd.id).set(createdProd);
-          } catch(err) {
-            console.log('Saved to Local Realtime Storage.');
-          }
+          } catch(err) {}
         }
 
         const updated = [createdProd, ...productsList];
@@ -610,7 +591,7 @@
         const customItemsOnly = updated.filter(p => p.id.startsWith('custom-') || p.id.startsWith('cloud-'));
         localStorage.setItem('fdv_custom_products', JSON.stringify(customItemsOnly));
 
-        addToast(`Produit "${cleanTitle}" publié et synchronisé sur le Cloud ! ☁️`, 'info');
+        addToast(`Article "${cleanTitle}" publié !`, 'info');
         setNewProduct({ title: '', category: 'Perruques & Mèches', price: '', image: '', imagePreview: null, description: '', badge: 'Nouveau', installmentText: 'Disponible en plusieurs couleurs' });
         setIsAdminFormModalOpen(false);
         setActiveCategory(createdProd.category);
@@ -619,7 +600,6 @@
 
       const handleDeleteProduct = (productId) => {
         if (!isAdminAuthenticated) return;
-
         if (db && isFirebaseActive && productId.startsWith('cloud-')) {
           try {
             db.collection('products').doc(productId).delete();
@@ -630,7 +610,7 @@
         setProductsList(updated);
         const customItemsOnly = updated.filter(p => p.id.startsWith('custom-') || p.id.startsWith('cloud-'));
         localStorage.setItem('fdv_custom_products', JSON.stringify(customItemsOnly));
-        addToast('Produit retiré de la boutique et du Cloud.', 'info');
+        addToast('Produit supprimé.', 'info');
       };
 
       const filteredProducts = productsList.filter(p => {
@@ -655,7 +635,7 @@
           return [...prev, { ...productToAdd, selectedSize: size, selectedColor: color, quantity: qty }];
         });
 
-        addToast(`"${productToAdd.title}" ajouté à votre panier !`, 'cart');
+        addToast(`"${productToAdd.title}" ajouté au panier.`, 'cart');
         setIsCartOpen(true);
       };
 
@@ -663,10 +643,10 @@
         if (e) e.stopPropagation();
         if (wishlistIds.includes(product.id)) {
           setWishlistIds(prev => prev.filter(id => id !== product.id));
-          addToast(`"${product.title}" retiré des favoris.`, 'wishlist');
+          addToast(`Rétiré des favoris.`, 'wishlist');
         } else {
           setWishlistIds(prev => [...prev, product.id]);
-          addToast(`"${product.title}" ajouté aux favoris !`, 'wishlist');
+          addToast(`Ajouté aux favoris.`, 'wishlist');
         }
       };
 
@@ -680,7 +660,7 @@
 
       const handleRemoveFromCart = (item) => {
         setCart(prev => prev.filter(i => !(i.id === item.id && i.selectedSize === item.selectedSize && i.selectedColor === item.selectedColor)));
-        addToast('Article retiré du panier.', 'info');
+        addToast('Article retiré.', 'info');
       };
 
       const handleShareOnFacebook = (product) => {
@@ -692,42 +672,26 @@
 
       return (
         <div className="app-layout">
-          {/* 1. TOP ANNOUNCEMENT BAR */}
+          {/* 1. TOP ANNOUNCEMENT BAR (CLEAN & ELEGANT) */}
           <div className="announcement-bar">
             <div className="announcement-content">
               <div className="announcement-item">
-                <Icon name="sparkles" size={13} color="#F4C7C3" />
-                <span>Nouveau : Collection <strong>Perruques & Mèches Human Hair</strong> & <strong>Éventails Pagne (1 700 FCFA)</strong></span>
+                <span>Perruques & Mèches Human Hair • Éventails Pagne Wax à 1 700 FCFA</span>
               </div>
-              <span style={{ opacity: 0.4 }}>|</span>
+              <span style={{ opacity: 0.3 }}>|</span>
               <div className="announcement-item">
-                <div className="cloud-badge">
-                  <Icon name="cloud" size={12} />
-                  <span>Base de Données Cloud Synchro Active</span>
-                </div>
+                <span>Paiement à la livraison & Expédition rapide</span>
               </div>
-              {isAdminAuthenticated && (
-                <>
-                  <span style={{ opacity: 0.4 }}>|</span>
-                  <div className="admin-badge-authenticated">
-                    <Icon name="lock" size={12} />
-                    <span>Mode Admin Actif</span>
-                  </div>
-                </>
-              )}
             </div>
           </div>
 
-          {/* 2. MAIN HEADER */}
+          {/* 2. MAIN HEADER (CLEAN BRANDING) */}
           <header className="main-header">
             <div className="header-container">
               <a href="#" className="brand-logo" onClick={() => setActiveCategory('Perruques & Mèches')}>
-                <div className="brand-icon-wrapper">
-                  <Icon name="sparkles" size={20} color="#68486E" />
-                </div>
                 <div>
-                  <span>FDV shopping</span>
-                  <span className="brand-subtext">BEAUTÉ, PERRUQUES & COUTURE</span>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontWeight: 700, letterSpacing: '1px' }}>FDV shopping</span>
+                  <span className="brand-subtext" style={{ display: 'block', letterSpacing: '2px' }}>BEAUTÉ, PERRUQUES & COUTURE</span>
                 </div>
               </a>
 
@@ -755,12 +719,12 @@
               </nav>
 
               <div className="header-actions">
-                {isAdminAuthenticated ? (
+                {isAdminAuthenticated && (
                   <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.78rem' }} onClick={() => setIsAdminFormModalOpen(true)}>
                     <Icon name="plus-circle" size={14} />
-                    <span>+ Produit Cloud</span>
+                    <span>+ Produit</span>
                   </button>
-                ) : null}
+                )}
 
                 <button className="icon-btn" onClick={() => setIsSearchOpen(true)} title="Rechercher">
                   <Icon name="search" size={20} />
@@ -779,22 +743,21 @@
             </div>
           </header>
 
-          {/* 3. HERO BANNER */}
+          {/* 3. HERO BANNER (CLEAN LUXURY MINIMALIST) */}
           <section className="hero-section">
             <div className="hero-glow-1"></div>
             <div className="hero-glow-2"></div>
             <div className="hero-container">
               <div className="hero-content">
                 <div className="hero-tag">
-                  <Icon name="sparkles" size={14} color="#E89CAE" />
-                  <span>Nouvelle Collection Perruques & Body Wave</span>
+                  <span>Collection Exclusive 2026</span>
                 </div>
                 <h1 className="hero-title">
                   PERRUQUES & MÈCHES <br />
                   <span className="hero-title-accent">HAUTE QUALITÉ</span>
                 </h1>
                 <p className="hero-subtitle">
-                  Cheveux 100% humains, Body Wave, Deep Wave, Lisse & Coupe Carré. Base Cloud Temps Réel connectée.
+                  Cheveux 100% humains, Body Wave, Deep Wave, Lisse & Coupe Carré. Qualité certifiée et confection soignée.
                 </p>
                 <button
                   className="btn-primary"
@@ -814,11 +777,11 @@
                 </div>
                 <div className="floating-badge">
                   <div className="floating-badge-icon">
-                    <Icon name="cloud-lightning" size={20} color="#27AE60" />
+                    <Icon name="shield-check" size={20} color="#27AE60" />
                   </div>
                   <div>
-                    <div className="floating-badge-title">Cloud Synchro Temps Réel</div>
-                    <div className="floating-badge-subtitle">Base Firebase Connectée</div>
+                    <div className="floating-badge-title">Qualité Garantit</div>
+                    <div className="floating-badge-subtitle">100% Cheveux Humains Premium</div>
                   </div>
                 </div>
               </div>
@@ -829,7 +792,7 @@
           <section id="featured-section" className="section-container">
             <div className="section-header">
               <div>
-                <span className="section-subtitle">CATALOGUE EN DIRECT ({filteredProducts.length} ARTİCLES)</span>
+                <span className="section-subtitle">CATALOGUE ({filteredProducts.length} ARTICLES)</span>
                 <h2 className="section-title">Catalogue {activeCategory}</h2>
               </div>
               {isAdminAuthenticated && (
@@ -925,7 +888,7 @@
             </div>
           </section>
 
-          {/* 5. ADMIN AUTH MODAL (CONNEXION SECURISEE) */}
+          {/* 5. ADMIN AUTH MODAL */}
           {isAdminAuthModalOpen && (
             <div className="modal-overlay" onClick={() => setIsAdminAuthModalOpen(false)}>
               <div className="modal-content" style={{ maxWidth: '440px' }} onClick={(e) => e.stopPropagation()}>
@@ -934,27 +897,26 @@
                 </button>
                 <div style={{ padding: '32px', textAlign: 'center' }}>
                   <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#FAF0F2', color: '#68486E', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-                    <Icon name="lock" size={28} />
+                    <Icon name="lock" size={26} />
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E', marginBottom: '6px' }}>Connexion Propriétaire</h3>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E', marginBottom: '6px' }}>Accès Propriétaire</h3>
                   <p style={{ fontSize: '0.85rem', color: '#6E6373', marginBottom: '20px' }}>
-                    Veuillez saisir votre code d'accès administrateur sécurisé.
+                    Saisissez votre mot de passe administrateur.
                   </p>
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <input
                       type="password"
-                      placeholder="Mot de passe Administrateur"
+                      placeholder="Mot de passe"
                       value={adminPasswordInput}
                       onChange={(e) => setAdminPasswordInput(e.target.value)}
                       className="newsletter-input"
-                      style={{ width: '100%', textAlign: 'center', fontSize: '1rem', letterSpacing: '2px' }}
+                      style={{ width: '100%', textAlign: 'center', fontSize: '1rem' }}
                       autoFocus
                       required
                     />
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                      <Icon name="key" size={18} />
-                      <span>SE CONNECTER À L'ADMINISTRATION</span>
+                      <span>SE CONNECTER</span>
                     </button>
                   </form>
                 </div>
@@ -962,7 +924,7 @@
             </div>
           )}
 
-          {/* 6. ADMIN PRODUCT FORM MODAL WITH FILE UPLOAD */}
+          {/* 6. ADMIN PRODUCT FORM MODAL */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
               <div className="modal-content" style={{ maxWidth: '540px' }} onClick={(e) => e.stopPropagation()}>
@@ -971,14 +933,9 @@
                 </button>
                 <div style={{ padding: '32px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E8F8F0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#27AE60' }}>
-                        <Icon name="cloud-lightning" size={22} />
-                      </div>
-                      <div>
-                        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E' }}>Ajouter un Produit (Cloud Synchro)</h3>
-                        <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Propriétaire Authentifié 🔒</p>
-                      </div>
+                    <div>
+                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2C222E' }}>Ajouter un Produit</h3>
+                      <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Session Administrateur Active</p>
                     </div>
                     <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', padding: '4px 10px', borderRadius: '12px' }}>
                       Déconnexion
@@ -1035,19 +992,15 @@
                       </div>
                     </div>
 
-                    {/* PHOTO UPLOAD & PREVIEW SECTION */}
                     <div>
                       <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '6px' }}>
-                        Photo du Produit (Télécharger depuis Téléphone ou Ordinateur) *
+                        Photo du Produit *
                       </label>
                       
                       <label className="file-upload-zone">
-                        <Icon name="upload-cloud" size={28} color="#68486E" />
+                        <Icon name="upload-cloud" size={26} color="#68486E" />
                         <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#68486E' }}>
-                          📷 Cliquez ici pour Choisir une Photo (JPG, PNG)
-                        </span>
-                        <span style={{ fontSize: '0.75rem', color: '#9B8F9E' }}>
-                          Sélectionnez une image de votre galerie ou ordinateur
+                          📷 Choisir une Photo (JPG, PNG)
                         </span>
                         <input
                           type="file"
@@ -1060,7 +1013,7 @@
                       {newProduct.imagePreview && (
                         <div style={{ marginTop: '12px', textAlign: 'center', background: '#FAF6FA', padding: '10px', borderRadius: '14px' }}>
                           <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '6px' }}>
-                            ✓ Aperçu de la photo chargée :
+                            ✓ Aperçu de la photo :
                           </span>
                           <img
                             src={newProduct.imagePreview}
@@ -1073,7 +1026,7 @@
 
                     <div>
                       <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2C222E', display: 'block', marginBottom: '4px' }}>
-                        Description & Détails
+                        Description
                       </label>
                       <textarea
                         placeholder="Description du produit..."
@@ -1085,8 +1038,7 @@
                     </div>
 
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '6px' }}>
-                      <Icon name="cloud-lightning" size={18} />
-                      <span>PUBLIER ET SYNCHRONISER SUR INTERNET</span>
+                      <span>PUBLIER LE PRODUIT</span>
                     </button>
                   </form>
                 </div>
@@ -1099,20 +1051,19 @@
             <div className="footer-container">
               <div>
                 <div className="footer-brand">
-                  <Icon name="sparkles" size={20} color="#F4C7C3" />
-                  <span style={{ marginLeft: '8px' }}>FDV shopping</span>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', fontWeight: 700 }}>FDV shopping</span>
                 </div>
                 <p className="footer-desc">
                   Perruques, Mèches Human Hair & Éventails en Pagne de haute facture. Célébrez votre beauté au quotidien.
                 </p>
               </div>
               <div>
-                <h4 className="footer-col-title">Propriétaire / Administration</h4>
+                <h4 className="footer-col-title">Administration</h4>
                 <ul className="footer-links">
                   <li>
                     {isAdminAuthenticated ? (
                       <button onClick={() => setIsAdminFormModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, color: '#27AE60', fontWeight: 700 }}>
-                        🔒 Gérer la boutique Cloud (Connecté)
+                        🔒 Gérer la boutique (Connecté)
                       </button>
                     ) : (
                       <button onClick={() => setIsAdminAuthModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
@@ -1124,7 +1075,7 @@
               </div>
             </div>
             <div className="footer-bottom">
-              <div>© 2026 FDV shopping. Connecté à la Base Cloud Firebase.</div>
+              <div>© 2026 FDV shopping. Tous droits réservés.</div>
             </div>
           </footer>
 
@@ -1313,8 +1264,8 @@
           {/* FLOATING TOASTS */}
           <div className="toast-container">
             {toasts.map(t => (
-              <div key={t.id} className="toast" style={{ borderColor: t.type === 'error' ? '#E74C3C' : '#D4AF37' }}>
-                <Icon name={t.type === 'error' ? 'alert-triangle' : 'sparkles'} size={18} color={t.type === 'error' ? '#E74C3C' : '#D4AF37'} />
+              <div key={t.id} className="toast" style={{ borderColor: t.type === 'error' ? '#E74C3C' : '#68486E' }}>
+                <Icon name={t.type === 'error' ? 'alert-triangle' : 'check'} size={18} color={t.type === 'error' ? '#E74C3C' : '#27AE60'} />
                 <span>{t.message}</span>
               </div>
             ))}
