@@ -1177,52 +1177,61 @@
             </div>
           )}
 
-          {/* 6. CLEAN, PERFECTLY RESPONSIVE PRODUCT EDIT / ADD MODAL */}
+          {/* 6. MODERN INTUITIVE ADMIN PRODUCT CREATOR / EDITOR MODAL */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
-              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '640px' }} onClick={(e) => e.stopPropagation()}>
                 
-                {/* MODAL HEADER */}
-                <div style={{ padding: '18px 20px', borderBottom: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FBF8F5' }}>
+                {/* 1. ELEGANT HEADER */}
+                <div style={{ padding: '20px 24px', background: 'linear-gradient(135deg, #1F1522 0%, #3D2042 100%)', color: '#FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid rgba(226, 167, 180, 0.3)' }}>
                   <div>
-                    <span style={{ fontSize: '0.68rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
-                      GESTION BOUTIQUE
+                    <span style={{ fontSize: '0.68rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--rose-gold)', textTransform: 'uppercase', display: 'block', marginBottom: '2px' }}>
+                      STUDIO PROPRIÉTAIRE FDV
                     </span>
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--purple-dark)' }}>
-                      {editingProduct ? 'Modifier l’Article' : 'Ajouter un Produit'}
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.45rem', margin: 0, color: '#FFFFFF' }}>
+                      {editingProduct ? 'Modifier l’Article' : 'Ajouter un Nouvel Article'}
                     </h3>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <button onClick={handleAdminLogout} style={{ fontSize: '0.72rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '5px 10px', borderRadius: '10px', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <button onClick={handleAdminLogout} style={{ fontSize: '0.72rem', color: '#E74C3C', fontWeight: 700, background: '#FADBD8', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer' }}>
                       Déconnexion
                     </button>
-                    <button className="modal-close-btn" style={{ position: 'static' }} onClick={() => setIsAdminFormModalOpen(false)}>
-                      <Icon name="x" size={18} color="#2A172E" />
+                    <button
+                      onClick={() => setIsAdminFormModalOpen(false)}
+                      style={{ background: 'rgba(255, 255, 255, 0.15)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#FFFFFF', width: '34px', height: '34px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                    >
+                      <Icon name="x" size={18} color="#FFFFFF" />
                     </button>
                   </div>
                 </div>
 
-                {/* MODAL SCROLLABLE FORM BODY */}
-                <div style={{ padding: '20px', paddingBottom: '30px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {/* 2. SCROLLABLE STRUCTURED CARDS BODY */}
+                <div style={{ padding: '20px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', background: '#FBF8F5' }}>
                   
-                  <div>
-                    <label className="form-label">Titre / Nom du Produit *</label>
-                    <input
-                      type="text"
-                      className="form-input"
-                      placeholder="ex: Perruque Body Wave Taille 30"
-                      value={productFormData.title}
-                      onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
-                      required
-                    />
-                  </div>
+                  {/* CARD 1: IDENTIFICATION PRODUIT */}
+                  <div className="admin-editor-section-card">
+                    <div className="admin-section-header">
+                      <span style={{ fontSize: '1.1rem' }}>📌</span>
+                      <span className="admin-section-title">1. Identification du Produit</span>
+                    </div>
 
-                  <div className="form-grid-row">
                     <div>
-                      <label className="form-label">Catégorie *</label>
+                      <label className="admin-form-label">Titre / Nom du Produit *</label>
+                      <input
+                        type="text"
+                        className="admin-form-input"
+                        placeholder="ex: Perruque Body Wave Taille 30"
+                        value={productFormData.title}
+                        onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="admin-form-label">Catégorie du Catalogue *</label>
                       <select
-                        className="form-input"
+                        className="admin-form-input"
                         value={productFormData.category}
                         onChange={(e) => setProductFormData({ ...productFormData, category: e.target.value })}
                       >
@@ -1232,58 +1241,95 @@
                         <option value="Accessoires">Accessoires</option>
                       </select>
                     </div>
-
-                    <div>
-                      <label className="form-label">Prix (FCFA) *</label>
-                      <input
-                        type="number"
-                        className="form-input"
-                        placeholder="ex: 65000"
-                        value={productFormData.price}
-                        onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
-                        required
-                      />
-                    </div>
                   </div>
 
-                  <div className="form-grid-row">
-                    <div>
-                      <label className="form-label">Nombre de Stock Disponible *</label>
-                      <input
-                        type="number"
-                        min="0"
-                        className="form-input"
-                        placeholder="ex: 10"
-                        value={productFormData.stock}
-                        onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
-                        required
-                      />
+                  {/* CARD 2: PRIX, STOCK & ÉCUSSON */}
+                  <div className="admin-editor-section-card">
+                    <div className="admin-section-header">
+                      <span style={{ fontSize: '1.1rem' }}>💰</span>
+                      <span className="admin-section-title">2. Tarification & Stock</span>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div>
+                        <label className="admin-form-label">Prix de Vente (FCFA) *</label>
+                        <input
+                          type="number"
+                          className="admin-form-input"
+                          placeholder="ex: 65000"
+                          value={productFormData.price}
+                          onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="admin-form-label">Quantité en Stock *</label>
+                        <input
+                          type="number"
+                          min="0"
+                          className="admin-form-input"
+                          placeholder="ex: 10"
+                          value={productFormData.stock}
+                          onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
+                          required
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="form-label">Indicatif Image (Haut à Gauche)</label>
+                      <label className="admin-form-label">Badge Image (Haut à Gauche)</label>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                        {['Nouveau', 'Top Vente', 'Offre Spéciale', 'Populaire', 'Luxe VIP'].map(presetBadge => (
+                          <button
+                            type="button"
+                            key={presetBadge}
+                            onClick={() => setProductFormData({ ...productFormData, badge: presetBadge })}
+                            style={{
+                              padding: '4px 10px',
+                              borderRadius: '12px',
+                              fontSize: '0.75rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              border: '1px solid rgba(226, 167, 180, 0.4)',
+                              background: productFormData.badge === presetBadge ? 'var(--purple-dark)' : '#FFFFFF',
+                              color: productFormData.badge === presetBadge ? '#FFFFFF' : 'var(--purple-dark)'
+                            }}
+                          >
+                            {presetBadge}
+                          </button>
+                        ))}
+                      </div>
                       <input
                         type="text"
-                        className="form-input"
-                        placeholder="ex: Top Vente, Nouveau, -20%, Luxe VIP"
+                        className="admin-form-input"
+                        placeholder="ou saisissez un badge personnalisé (ex: -20%)"
                         value={productFormData.badge}
                         onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
                       />
                     </div>
                   </div>
 
-                  {/* MULTI-PHOTO UPLOADER (MAX 4 PHOTOS) */}
-                  <div>
-                    <label className="form-label">Photos de l'Article (Maximum 4 Photos) *</label>
-                    
-                    {productFormData.images.length < 4 && (
-                      <label className="file-upload-zone">
-                        <Icon name="upload-cloud" size={22} color="#5C3260" />
-                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
-                          📷 Ajouter des Photos ({productFormData.images.length}/4 chargees)
+                  {/* CARD 3: GALERIE PHOTOS HAUTE DÉFINITION (MAX 4) */}
+                  <div className="admin-editor-section-card">
+                    <div className="admin-section-header">
+                      <span style={{ fontSize: '1.1rem' }}>📷</span>
+                      <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="admin-section-title">3. Photos de l'Article</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--purple-accent)' }}>
+                          ({productFormData.images.length}/4 photos)
                         </span>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                          Formats: JPG, PNG (Cliquer pour choisir)
+                      </div>
+                    </div>
+
+                    {productFormData.images.length < 4 && (
+                      <label className="file-upload-zone-luxury">
+                        <Icon name="upload-cloud" size={26} color="#5C3260" />
+                        <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--purple-dark)' }}>
+                          Cliquez ici pour ajouter des photos
+                        </span>
+                        <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                          Vous pouvez ajouter jusqu'à 4 photos HD (JPG, PNG)
                         </span>
                         <input
                           type="file"
@@ -1296,23 +1342,24 @@
                     )}
 
                     {productFormData.images.length > 0 && (
-                      <div style={{ marginTop: '10px' }}>
-                        <span style={{ fontSize: '0.75rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '6px' }}>
-                          ✓ Photos enregistrées ({productFormData.images.length}/4) :
+                      <div style={{ marginTop: '4px' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
+                          ✓ Photos actuellement configurées :
                         </span>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                           {productFormData.images.map((imgSrc, idx) => (
-                            <div key={idx} style={{ position: 'relative', width: '70px', height: '85px' }}>
-                              <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover', border: '1px solid rgba(226, 167, 180, 0.4)' }} />
+                            <div key={idx} style={{ position: 'relative', width: '80px', height: '96px' }}>
+                              <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover', border: '2px solid rgba(226, 167, 180, 0.4)' }} />
                               {idx === 0 && (
-                                <span style={{ position: 'absolute', bottom: '3px', left: '3px', right: '3px', background: 'rgba(42, 23, 46, 0.85)', color: '#FFF', fontSize: '0.55rem', textAlign: 'center', borderRadius: '5px', fontWeight: 700 }}>
+                                <span style={{ position: 'absolute', bottom: '4px', left: '4px', right: '4px', background: 'rgba(42, 23, 46, 0.9)', color: '#FFF', fontSize: '0.55rem', textAlign: 'center', borderRadius: '6px', fontWeight: 800, padding: '2px 0' }}>
                                   ★ Principale
                                 </span>
                               )}
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFormImage(idx)}
-                                style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '0.65rem', fontWeight: 700 }}
+                                style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.2)' }}
+                                title="Supprimer cette photo"
                               >
                                 ✕
                               </button>
@@ -1323,39 +1370,46 @@
                     )}
                   </div>
 
-                  <div>
-                    <label className="form-label">Description du Produit</label>
-                    <textarea
-                      className="form-input"
-                      rows="3"
-                      placeholder="Description soignée du produit..."
-                      value={productFormData.description}
-                      onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
-                      style={{ resize: 'none' }}
-                    />
+                  {/* CARD 4: DESCRIPTION & DÉTAILS */}
+                  <div className="admin-editor-section-card">
+                    <div className="admin-section-header">
+                      <span style={{ fontSize: '1.1rem' }}>📝</span>
+                      <span className="admin-section-title">4. Description Détaillée</span>
+                    </div>
+
+                    <div>
+                      <textarea
+                        className="admin-form-input"
+                        rows="3"
+                        placeholder="Décrivez la qualité des cheveux, la longueur, la couleur ou les motifs du pagne..."
+                        value={productFormData.description}
+                        onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
+                        style={{ resize: 'none' }}
+                      />
+                    </div>
                   </div>
 
                 </div>
 
-                {/* MODAL FOOTER */}
-                <div style={{ padding: '14px 20px', background: '#FBF8F5', borderTop: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {/* 3. MODAL FOOTER */}
+                <div style={{ padding: '16px 24px', background: '#FFFFFF', borderTop: '1px solid rgba(226, 167, 180, 0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     {editingProduct && (
                       <button
                         type="button"
                         onClick={() => handleDeleteProduct(editingProduct.id)}
-                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '8px 14px', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '10px 16px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 800, cursor: 'pointer' }}
                       >
-                        Supprimer
+                        🗑️ Supprimer l'Article
                       </button>
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                     <button
                       type="button"
                       onClick={() => setIsAdminFormModalOpen(false)}
-                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '8px 16px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '10px 18px', borderRadius: '14px', fontSize: '0.84rem', fontWeight: 700, cursor: 'pointer' }}
                     >
                       Annuler
                     </button>
@@ -1364,10 +1418,10 @@
                       type="button"
                       onClick={handleSaveProduct}
                       className="btn-primary"
-                      style={{ padding: '8px 18px', borderRadius: '12px', fontSize: '0.8rem' }}
+                      style={{ padding: '10px 22px', borderRadius: '14px', fontSize: '0.84rem' }}
                     >
-                      <Icon name="check" size={15} color="#FFFFFF" />
-                      <span>{editingProduct ? 'Enregistrer' : 'Publier'}</span>
+                      <Icon name="check" size={16} color="#FFFFFF" />
+                      <span>{editingProduct ? 'Enregistrer les Modifications' : 'Publier le Produit'}</span>
                     </button>
                   </div>
                 </div>

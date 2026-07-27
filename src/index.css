@@ -830,6 +830,81 @@ body {
   z-index: 301;
 }
 
+/* ULTRA STRUCTURED & INTUITIVE ADMIN PRODUCT CREATOR CARD STYLING */
+.admin-editor-section-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(226, 167, 180, 0.3);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 4px 15px rgba(42, 23, 46, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(226, 167, 180, 0.2);
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.admin-section-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--purple-dark);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.admin-form-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--purple-dark);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.admin-form-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(226, 167, 180, 0.4);
+  background: #FAF6FA;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--purple-dark);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.admin-form-input:focus {
+  border-color: var(--purple-accent);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(92, 50, 96, 0.12);
+}
+
+.file-upload-zone-luxury {
+  border: 2px dashed var(--purple-accent);
+  border-radius: 16px;
+  background: #FAF6FA;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.file-upload-zone-luxury:hover {
+  background: #F7EBEF;
+  border-color: var(--rose-gold);
+}
+
 .quickview-modal-content {
   background: var(--bg-card);
   border-radius: 26px;
