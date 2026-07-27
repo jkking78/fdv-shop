@@ -1424,42 +1424,87 @@
             </div>
           </footer>
 
-          {/* SLIDE-OVER CART DRAWER WITH WHATSAPP ORDER BUTTON */}
+          {/* HAUTE COUTURE LUXURY CART DRAWER */}
           {isCartOpen && (
             <>
               <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>
               <div className="cart-drawer">
-                <div className="cart-header">
-                  <h3 className="cart-title font-serif" style={{ fontSize: '1.3rem', fontFamily: 'var(--font-serif)' }}>Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})</h3>
-                  <button className="icon-btn" onClick={() => setIsCartOpen(false)}>
-                    <Icon name="x" size={18} color="#2A172E" />
+                {/* 1. LUXURY HEADER */}
+                <div className="cart-header-luxury">
+                  <div>
+                    <span className="cart-header-badge">Maison FDV shopping</span>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.45rem', fontWeight: 700, margin: 0, color: '#FFFFFF' }}>
+                      Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setIsCartOpen(false)}
+                    style={{ background: 'rgba(255, 255, 255, 0.15)', border: '1px solid rgba(255, 255, 255, 0.3)', color: '#FFFFFF', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                  >
+                    <Icon name="x" size={18} color="#FFFFFF" />
                   </button>
                 </div>
 
-                <div className="cart-items-list">
+                {/* 2. REASSURANCE STRIP */}
+                <div className="cart-reassurance-strip">
+                  <span>🚚 Livraison Express Abidjan</span>
+                  <span>🔒 Service Direct WhatsApp</span>
+                </div>
+
+                {/* 3. SCROLLABLE ITEMS LIST */}
+                <div className="cart-items-list-luxury">
                   {cart.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '50px 20px', color: '#6C5B70' }}>
-                      <p>Votre panier est vide.</p>
+                    <div style={{ textAlign: 'center', padding: '60px 20px', color: '#6C5B70', margin: 'auto' }}>
+                      <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#F7EBEF', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                        <Icon name="shopping-bag" size={30} color="#5C3260" />
+                      </div>
+                      <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--purple-dark)', marginBottom: '8px' }}>Votre Panier est Vide</h4>
+                      <p style={{ fontSize: '0.88rem', color: '#6C5B70', marginBottom: '20px', maxWidth: '280px', margin: '0 auto 20px' }}>
+                        Découvrez nos magnifiques perruques 100% human hair & nos éventails en pagne faits main.
+                      </p>
+                      <button
+                        className="btn-primary"
+                        style={{ fontSize: '0.84rem', padding: '10px 22px' }}
+                        onClick={() => setIsCartOpen(false)}
+                      >
+                        EXPLORER LA COLLECTION
+                      </button>
                     </div>
                   ) : (
-                    cart.map(item => (
-                      <div key={`${item.id}-${item.selectedSize}`} className="cart-item">
-                        <img src={item.image} alt={item.title} className="cart-item-img" />
-                        <div className="cart-item-details">
-                          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <h4 className="cart-item-title">{item.title}</h4>
-                            <button onClick={() => handleRemoveFromCart(item)} style={{ color: '#9B8F9E', background: 'none', border: 'none', cursor: 'pointer' }}>
-                              <Icon name="trash-2" size={16} color="#9B8F9E" />
-                            </button>
-                          </div>
-                          <div className="installment-tag" style={{ fontSize: '0.75rem', marginTop: '2px' }}>{item.installmentText}</div>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '12px', alignItems: 'center' }}>
-                            <div className="qty-controls">
-                              <button className="qty-btn" onClick={() => handleUpdateQty(item, item.quantity - 1)}>-</button>
-                              <span>{item.quantity}</span>
-                              <button className="qty-btn" onClick={() => handleUpdateQty(item, Math.min(item.stock || 99, item.quantity + 1))}>+</button>
+                    cart.map((item, idx) => (
+                      <div key={`${item.id}-${item.selectedSize}-${idx}`} className="cart-item-card">
+                        <img src={item.image} alt={item.title} className="cart-item-img-luxury" />
+                        
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                          <div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+                              <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--purple-dark)', lineHeight: '1.35', margin: 0 }}>
+                                {item.title}
+                              </h4>
+                              <button
+                                onClick={() => handleRemoveFromCart(item)}
+                                style={{ background: 'none', border: 'none', color: '#9B8F9E', cursor: 'pointer', padding: '2px' }}
+                                title="Retirer cet article"
+                              >
+                                <Icon name="trash-2" size={16} color="#E74C3C" />
+                              </button>
                             </div>
-                            <div style={{ fontWeight: 700, color: 'var(--purple-dark)' }}>{(item.price * item.quantity).toLocaleString('fr-FR')} FCFA</div>
+
+                            <span style={{ fontSize: '0.72rem', color: 'var(--purple-accent)', fontWeight: 600, display: 'block', marginTop: '2px' }}>
+                              {item.category}
+                            </span>
+                          </div>
+
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+                            <div className="card-qty-selector">
+                              <button className="card-qty-btn" onClick={() => handleUpdateQty(item, item.quantity - 1)}>-</button>
+                              <span className="card-qty-value">{item.quantity}</span>
+                              <button className="card-qty-btn" onClick={() => handleUpdateQty(item, Math.min(item.stock || 99, item.quantity + 1))}>+</button>
+                            </div>
+
+                            <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--purple-dark)' }}>
+                              {(item.price * item.quantity).toLocaleString('fr-FR')} FCFA
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1467,18 +1512,39 @@
                   )}
                 </div>
 
+                {/* 4. LUXURY SUMMARY & WHATSAPP CHECKOUT FOOTER */}
                 {cart.length > 0 && (
-                  <div className="cart-footer">
-                    <div className="summary-row"><span>Total</span><span>{subtotal.toLocaleString('fr-FR')} FCFA</span></div>
-                    
+                  <div className="cart-footer-luxury">
+                    <div style={{ background: '#FAF6FA', padding: '14px 16px', borderRadius: '16px', border: '1px solid rgba(226, 167, 180, 0.25)', marginBottom: '16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#6C5B70', marginBottom: '6px' }}>
+                        <span>Sous-total articles ({cart.reduce((a, c) => a + c.quantity, 0)})</span>
+                        <span style={{ fontWeight: 700, color: 'var(--purple-dark)' }}>{subtotal.toLocaleString('fr-FR')} FCFA</span>
+                      </div>
+                      
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#6C5B70', marginBottom: '10px' }}>
+                        <span>Expédition & Livraison</span>
+                        <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700 }}>Confirmées sur WhatsApp</span>
+                      </div>
+
+                      <div style={{ borderTop: '1px dashed rgba(226, 167, 180, 0.4)', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--purple-dark)' }}>Total à Régler</span>
+                        <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--purple-dark)' }}>
+                          {subtotal.toLocaleString('fr-FR')} FCFA
+                        </span>
+                      </div>
+                    </div>
+
                     <button
-                      className="btn-whatsapp"
-                      style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }}
+                      className="btn-whatsapp-checkout"
                       onClick={() => handleOrderOnWhatsApp(cart)}
                     >
                       <Icon name="whatsapp" size={20} color="#FFFFFF" />
-                      <span>COMMANDER SUR WHATSAPP (07 78 73 95 27)</span>
+                      <span>COMMANDER SUR WHATSAPP</span>
                     </button>
+                    
+                    <span style={{ display: 'block', textAlign: 'center', fontSize: '0.72rem', color: '#6C5B70', marginTop: '8px', fontWeight: 600 }}>
+                      ⚡ Validation instantanée avec le vendeur (07 78 73 95 27)
+                    </span>
                   </div>
                 )}
               </div>
