@@ -823,10 +823,10 @@
         if (e) e.stopPropagation();
         if (wishlistIds.includes(product.id)) {
           setWishlistIds(prev => prev.filter(id => id !== product.id));
-          addToast(`Retiré des favoris.`, 'wishlist');
+          addToast(`Retiré des favoris.`, 'info');
         } else {
           setWishlistIds(prev => [...prev, product.id]);
-          addToast(`Ajouté aux favoris.`, 'wishlist');
+          addToast(`Ajouté aux favoris.`, 'info');
         }
       };
 
@@ -1035,7 +1035,7 @@
                       <button
                         className={`card-wishlist-btn ${isWishlisted ? 'active' : ''}`}
                         onClick={(e) => handleToggleWishlist(product, e)}
-                        title="Favoris"
+                        title={isWishlisted ? "Cliquer pour retirer des favoris" : "Ajouter aux favoris"}
                       >
                         <Icon name="heart" size={16} fill={isWishlisted ? '#E2A7B4' : 'none'} color={isWishlisted ? '#E2A7B4' : '#6C5B70'} />
                       </button>
@@ -1603,7 +1603,7 @@
             </div>
           )}
 
-          {/* WISHLIST MODAL */}
+          {/* WISHLIST MODAL WITH DIRECT ITEM REMOVAL BUTTON */}
           {isWishlistOpen && (
             <div className="modal-overlay" onClick={() => setIsWishlistOpen(false)}>
               <div className="modal-content" style={{ maxWidth: '540px' }} onClick={(e) => e.stopPropagation()}>
@@ -1611,19 +1611,57 @@
                   <Icon name="x" size={18} color="#2A172E" />
                 </button>
                 <div style={{ padding: '24px' }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', marginBottom: '16px' }}>Mes Favoris ({wishlistProducts.length})</h3>
-                  {wishlistProducts.map(p => (
-                    <div key={p.id} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '10px', padding: '8px', borderRadius: '10px', background: '#FAF6FA' }}>
-                      <img src={p.image} alt={p.title} style={{ width: '50px', height: '60px', borderRadius: '6px', objectFit: 'cover' }} />
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{p.title}</div>
-                        <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
-                      </div>
-                      <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem' }} onClick={() => { handleAddToCart(p); setWishlistIds(prev => prev.filter(id => id !== p.id)); }}>
-                        Panier
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', color: 'var(--purple-dark)' }}>
+                      Mes Favoris ({wishlistProducts.length})
+                    </h3>
+                  </div>
+
+                  {wishlistProducts.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '40px 20px', color: '#6C5B70' }}>
+                      <Icon name="heart" size={40} color="#E2A7B4" style={{ marginBottom: '12px' }} />
+                      <p style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '16px' }}>Votre liste de favoris est vide.</p>
+                      <button
+                        className="btn-primary"
+                        style={{ fontSize: '0.8rem', padding: '8px 18px' }}
+                        onClick={() => setIsWishlistOpen(false)}
+                      >
+                        Découvrir la Collection
                       </button>
                     </div>
-                  ))}
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '60vh', overflowY: 'auto' }}>
+                      {wishlistProducts.map(p => (
+                        <div key={p.id} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '10px 12px', borderRadius: '14px', background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.25)' }}>
+                          <img src={p.image} alt={p.title} style={{ width: '56px', height: '68px', borderRadius: '10px', objectFit: 'cover' }} />
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--purple-dark)', marginBottom: '2px' }}>{p.title}</div>
+                            <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--purple-accent)' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
+                          </div>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            <button
+                              className="btn-primary"
+                              style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '10px' }}
+                              onClick={() => { handleAddToCart(p); }}
+                            >
+                              + Panier
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setWishlistIds(prev => prev.filter(id => id !== p.id));
+                                addToast('Article retiré des favoris.', 'info');
+                              }}
+                              style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', width: '32px', height: '32px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                              title="Retirer des favoris"
+                            >
+                              <Icon name="trash-2" size={15} color="#E74C3C" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
