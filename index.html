@@ -875,7 +875,7 @@
             </div>
           </header>
 
-          {/* 3. HERO BANNER */}
+          {/* 3. HERO BANNER - PERFECT MODERATE MOBILE SIZING */}
           <section className="hero-section">
             <div className="hero-glow-1"></div>
             <div className="hero-glow-2"></div>
@@ -900,7 +900,7 @@
                     }}
                   >
                     <span>EXPLORER LA COLLECTION</span>
-                    <Icon name="arrow-right" size={18} color="#FFFFFF" />
+                    <Icon name="arrow-right" size={16} color="#FFFFFF" />
                   </button>
                 </div>
               </div>
@@ -908,10 +908,6 @@
               <div className="hero-image-wrapper">
                 <div className="hero-card-frame">
                   <img src="/assets/wigs/bodywave-30.jpg" alt="Body Wave Taille 30" />
-                </div>
-                <div className="floating-badge">
-                  <div className="floating-badge-title">FDV Privilège</div>
-                  <div className="floating-badge-subtitle">100% Cheveux Humains Premium</div>
                 </div>
               </div>
             </div>
@@ -924,8 +920,8 @@
                 <span className="section-subtitle">BOUTIQUE EN LIGNE ({filteredProducts.length} ARTICLES)</span>
                 <h2 className="section-title">Catalogue {activeCategory}</h2>
               </div>
-              <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={handleOpenNewProduct}>
-                <Icon name="plus-circle" size={16} color="#FFFFFF" />
+              <button className="btn-add-product-compact" onClick={handleOpenNewProduct}>
+                <Icon name="plus-circle" size={15} color="#FFFFFF" />
                 <span>+ Ajouter un Produit</span>
               </button>
             </div>
@@ -953,7 +949,7 @@
                     <div className="product-image-box">
                       {product.badge && (
                         <span className={`card-badge ${isOutOfStock ? 'out-of-stock' : product.badge === 'Nouveau' ? 'new' : product.badge === 'Top Vente' ? 'bestseller' : ''}`}>
-                          {isOutOfStock ? 'Rupture de stock' : product.badge}
+                          {isOutOfStock ? 'Rupture' : product.badge}
                         </span>
                       )}
 
@@ -963,7 +959,7 @@
                         onClick={(e) => handleOpenEditProduct(product, e)}
                         title="Modifier les infos de cet article"
                       >
-                        <Icon name="edit" size={16} color="#FFFFFF" />
+                        <Icon name="edit" size={15} color="#FFFFFF" />
                       </button>
 
                       <button
@@ -971,18 +967,18 @@
                         onClick={(e) => handleToggleWishlist(product, e)}
                         title="Favoris"
                       >
-                        <Icon name="heart" size={18} fill={isWishlisted ? '#E2A7B4' : 'none'} color={isWishlisted ? '#E2A7B4' : '#6C5B70'} />
+                        <Icon name="heart" size={16} fill={isWishlisted ? '#E2A7B4' : 'none'} color={isWishlisted ? '#E2A7B4' : '#6C5B70'} />
                       </button>
 
                       <img src={displayImage} alt={product.title} loading="lazy" />
 
                       <div className="card-quick-actions">
                         <button className="btn-add-cart" onClick={(e) => handleAddToCart(product, e)} disabled={isOutOfStock}>
-                          <Icon name="shopping-bag" size={16} color="#FFFFFF" />
+                          <Icon name="shopping-bag" size={15} color="#FFFFFF" />
                           <span>{isOutOfStock ? 'Rupture' : 'Ajouter au panier'}</span>
                         </button>
                         <button className="btn-quick-view" onClick={() => { setQuickViewProduct(product); setActiveModalImageIdx(0); }} title="Aperçu grand format">
-                          <Icon name="eye" size={18} color="#2A172E" />
+                          <Icon name="eye" size={16} color="#2A172E" />
                         </button>
                       </div>
                     </div>
@@ -1001,7 +997,7 @@
                       </div>
 
                       {/* STOCK-SYNCED QUANTITY SELECTOR & COMPACT BUY BUTTONS */}
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', gap: '6px' }}>
                         <div className="card-qty-selector">
                           <button
                             type="button"
@@ -1022,7 +1018,7 @@
                           </button>
                         </div>
 
-                        <div style={{ display: 'flex', gap: '6px' }}>
+                        <div style={{ display: 'flex', gap: '4px' }}>
                           <button
                             type="button"
                             className="btn-add-cart-icon"
@@ -1033,7 +1029,7 @@
                             disabled={isOutOfStock}
                             title="Ajouter cette quantité au panier"
                           >
-                            <Icon name="shopping-bag" size={16} color="#FFFFFF" />
+                            <Icon name="shopping-bag" size={15} color="#FFFFFF" />
                           </button>
 
                           <button
@@ -1046,7 +1042,7 @@
                             disabled={isOutOfStock}
                             title="Commander cette quantité sur WhatsApp"
                           >
-                            <Icon name="whatsapp" size={18} color="#FFFFFF" />
+                            <Icon name="whatsapp" size={16} color="#FFFFFF" />
                           </button>
                         </div>
                       </div>
@@ -1099,18 +1095,18 @@
               <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 
                 {/* MODAL HEADER */}
-                <div style={{ padding: '22px 24px 16px', borderBottom: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FBF8F5' }}>
+                <div style={{ padding: '18px 20px', borderBottom: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FBF8F5' }}>
                   <div>
-                    <span style={{ fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
+                    <span style={{ fontSize: '0.68rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
                       GESTION BOUTIQUE
                     </span>
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: 'var(--purple-dark)' }}>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.35rem', color: 'var(--purple-dark)' }}>
                       {editingProduct ? 'Modifier l’Article' : 'Ajouter un Produit'}
                     </h3>
                   </div>
 
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer' }}>
+                    <button onClick={handleAdminLogout} style={{ fontSize: '0.72rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '5px 10px', borderRadius: '10px', cursor: 'pointer' }}>
                       Déconnexion
                     </button>
                     <button className="modal-close-btn" style={{ position: 'static' }} onClick={() => setIsAdminFormModalOpen(false)}>
@@ -1120,7 +1116,7 @@
                 </div>
 
                 {/* MODAL SCROLLABLE FORM BODY */}
-                <div style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{ padding: '20px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   
                   <div>
                     <label className="form-label">Titre / Nom du Produit *</label>
@@ -1194,11 +1190,11 @@
                     
                     {productFormData.images.length < 4 && (
                       <label className="file-upload-zone">
-                        <Icon name="upload-cloud" size={24} color="#5C3260" />
-                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
+                        <Icon name="upload-cloud" size={22} color="#5C3260" />
+                        <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
                           📷 Ajouter des Photos ({productFormData.images.length}/4 chargees)
                         </span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                           Formats: JPG, PNG (Cliquer pour choisir)
                         </span>
                         <input
@@ -1212,23 +1208,23 @@
                     )}
 
                     {productFormData.images.length > 0 && (
-                      <div style={{ marginTop: '12px' }}>
-                        <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
+                      <div style={{ marginTop: '10px' }}>
+                        <span style={{ fontSize: '0.75rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '6px' }}>
                           ✓ Photos enregistrées ({productFormData.images.length}/4) :
                         </span>
-                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                           {productFormData.images.map((imgSrc, idx) => (
-                            <div key={idx} style={{ position: 'relative', width: '80px', height: '95px' }}>
-                              <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover', border: '1px solid rgba(226, 167, 180, 0.4)' }} />
+                            <div key={idx} style={{ position: 'relative', width: '70px', height: '85px' }}>
+                              <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover', border: '1px solid rgba(226, 167, 180, 0.4)' }} />
                               {idx === 0 && (
-                                <span style={{ position: 'absolute', bottom: '4px', left: '4px', right: '4px', background: 'rgba(42, 23, 46, 0.85)', color: '#FFF', fontSize: '0.6rem', textAlign: 'center', borderRadius: '6px', fontWeight: 700 }}>
+                                <span style={{ position: 'absolute', bottom: '3px', left: '3px', right: '3px', background: 'rgba(42, 23, 46, 0.85)', color: '#FFF', fontSize: '0.55rem', textAlign: 'center', borderRadius: '5px', fontWeight: 700 }}>
                                   ★ Principale
                                 </span>
                               )}
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFormImage(idx)}
-                                style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700 }}
+                                style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer', fontSize: '0.65rem', fontWeight: 700 }}
                               >
                                 ✕
                               </button>
@@ -1254,24 +1250,24 @@
                 </div>
 
                 {/* MODAL FOOTER */}
-                <div style={{ padding: '16px 24px', background: '#FBF8F5', borderTop: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ padding: '14px 20px', background: '#FBF8F5', borderTop: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     {editingProduct && (
                       <button
                         type="button"
                         onClick={() => handleDeleteProduct(editingProduct.id)}
-                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '10px 16px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
+                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '8px 14px', borderRadius: '10px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
                       >
                         Supprimer
                       </button>
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '10px' }}>
+                  <div style={{ display: 'flex', gap: '8px' }}>
                     <button
                       type="button"
                       onClick={() => setIsAdminFormModalOpen(false)}
-                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '10px 18px', borderRadius: '14px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '8px 16px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
                     >
                       Annuler
                     </button>
@@ -1280,9 +1276,9 @@
                       type="button"
                       onClick={handleSaveProduct}
                       className="btn-primary"
-                      style={{ padding: '10px 22px', borderRadius: '14px' }}
+                      style={{ padding: '8px 18px', borderRadius: '12px', fontSize: '0.8rem' }}
                     >
-                      <Icon name="check" size={16} color="#FFFFFF" />
+                      <Icon name="check" size={15} color="#FFFFFF" />
                       <span>{editingProduct ? 'Enregistrer' : 'Publier'}</span>
                     </button>
                   </div>
@@ -1297,7 +1293,7 @@
             <div className="footer-container">
               <div>
                 <div className="footer-brand">
-                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', fontWeight: 700 }}>FDV shopping</span>
+                  <span style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', fontWeight: 700 }}>FDV shopping</span>
                 </div>
                 <p className="footer-desc">
                   Perruques, Mèches Human Hair & Éventails en Pagne de haute facture. Commandes WhatsApp au 07 78 73 95 27.
@@ -1338,9 +1334,9 @@
               <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>
               <div className="cart-drawer">
                 <div className="cart-header">
-                  <h3 className="cart-title font-serif" style={{ fontSize: '1.4rem', fontFamily: 'var(--font-serif)' }}>Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})</h3>
+                  <h3 className="cart-title font-serif" style={{ fontSize: '1.3rem', fontFamily: 'var(--font-serif)' }}>Mon Panier ({cart.reduce((a, c) => a + c.quantity, 0)})</h3>
                   <button className="icon-btn" onClick={() => setIsCartOpen(false)}>
-                    <Icon name="x" size={20} color="#2A172E" />
+                    <Icon name="x" size={18} color="#2A172E" />
                   </button>
                 </div>
 
@@ -1384,7 +1380,7 @@
                       style={{ width: '100%', justifyContent: 'center', marginTop: '16px' }}
                       onClick={() => handleOrderOnWhatsApp(cart)}
                     >
-                      <Icon name="whatsapp" size={22} color="#FFFFFF" />
+                      <Icon name="whatsapp" size={20} color="#FFFFFF" />
                       <span>COMMANDER SUR WHATSAPP (07 78 73 95 27)</span>
                     </button>
                   </div>
@@ -1398,7 +1394,7 @@
             <div className="modal-overlay" onClick={() => setQuickViewProduct(null)}>
               <div className="quickview-modal-content" onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={() => setQuickViewProduct(null)}>
-                  <Icon name="x" size={20} color="#2A172E" />
+                  <Icon name="x" size={18} color="#2A172E" />
                 </button>
 
                 <div className="quickview-grid">
@@ -1432,7 +1428,7 @@
 
                   {/* RIGHT: ARTICLE DETAILS & ACTIONS */}
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                       <span className="product-category">{quickViewProduct.category}</span>
                       <button className="fb-share-btn" onClick={() => handleShareOnFacebook(quickViewProduct)}>
                         <Icon name="share-2" size={14} color="#FFFFFF" />
@@ -1440,12 +1436,12 @@
                       </button>
                     </div>
 
-                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '2.1rem', margin: '0 0 10px 0', color: 'var(--purple-dark)', lineHeight: '1.2' }}>
+                    <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.8rem', margin: '0 0 8px 0', color: 'var(--purple-dark)', lineHeight: '1.2' }}>
                       {quickViewProduct.title}
                     </h2>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                      <div style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                      <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
                         {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
                       </div>
                       <span className={`stock-pill ${quickViewProduct.stock === 0 ? 'no-stock' : quickViewProduct.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
@@ -1453,16 +1449,16 @@
                       </span>
                     </div>
 
-                    <div style={{ background: '#FAF6FA', padding: '14px 18px', borderRadius: '16px', border: '1px solid rgba(226, 167, 180, 0.25)', marginBottom: '20px' }}>
-                      <p style={{ color: '#6C5B70', fontSize: '0.92rem', lineHeight: '1.5', margin: 0 }}>
+                    <div style={{ background: '#FAF6FA', padding: '12px 14px', borderRadius: '14px', border: '1px solid rgba(226, 167, 180, 0.25)', marginBottom: '16px' }}>
+                      <p style={{ color: '#6C5B70', fontSize: '0.88rem', lineHeight: '1.4', margin: 0 }}>
                         {quickViewProduct.description}
                       </p>
                     </div>
 
                     {/* QUANTITY SELECTOR IN QUICK VIEW MODAL */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--purple-dark)' }}>Quantité désirée :</span>
-                      <div className="card-qty-selector" style={{ padding: '4px 10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                      <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--purple-dark)' }}>Quantité :</span>
+                      <div className="card-qty-selector">
                         <button
                           type="button"
                           className="card-qty-btn"
@@ -1481,27 +1477,27 @@
                           +
                         </button>
                       </div>
-                      <span style={{ fontSize: '0.78rem', color: '#6C5B70' }}>(Max stock: {quickViewProduct.stock})</span>
+                      <span style={{ fontSize: '0.75rem', color: '#6C5B70' }}>(Stock: {quickViewProduct.stock})</span>
                     </div>
                     
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: 'auto' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: 'auto' }}>
                       <button
                         className="btn-whatsapp"
-                        style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
+                        style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
                         onClick={() => handleOrderOnWhatsApp([{ ...quickViewProduct, quantity: getSelectedQty(quickViewProduct.id) }])}
                         disabled={quickViewProduct.stock === 0}
                       >
-                        <Icon name="whatsapp" size={20} color="#FFFFFF" />
+                        <Icon name="whatsapp" size={18} color="#FFFFFF" />
                         <span>Commander ({getSelectedQty(quickViewProduct.id)}) sur WhatsApp</span>
                       </button>
 
                       <button
                         className="btn-primary"
-                        style={{ width: '100%', justifyContent: 'center', padding: '14px', borderRadius: '30px' }}
+                        style={{ width: '100%', justifyContent: 'center', padding: '12px', borderRadius: '24px' }}
                         onClick={() => { handleAddToCart(quickViewProduct); setQuickViewProduct(null); }}
                         disabled={quickViewProduct.stock === 0}
                       >
-                        <Icon name="shopping-bag" size={18} color="#FFFFFF" />
+                        <Icon name="shopping-bag" size={16} color="#FFFFFF" />
                         <span>{quickViewProduct.stock === 0 ? 'Article Épuisé' : `Ajouter (${getSelectedQty(quickViewProduct.id)}) au Panier`}</span>
                       </button>
                     </div>
@@ -1514,20 +1510,20 @@
           {/* WISHLIST MODAL */}
           {isWishlistOpen && (
             <div className="modal-overlay" onClick={() => setIsWishlistOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '540px' }} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={() => setIsWishlistOpen(false)}>
-                  <Icon name="x" size={20} color="#2A172E" />
+                  <Icon name="x" size={18} color="#2A172E" />
                 </button>
-                <div style={{ padding: '28px' }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', marginBottom: '20px' }}>Mes Favoris ({wishlistProducts.length})</h3>
+                <div style={{ padding: '24px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', marginBottom: '16px' }}>Mes Favoris ({wishlistProducts.length})</h3>
                   {wishlistProducts.map(p => (
-                    <div key={p.id} style={{ display: 'flex', gap: '14px', alignItems: 'center', marginBottom: '12px', padding: '10px', borderRadius: '12px', background: '#FAF6FA' }}>
-                      <img src={p.image} alt={p.title} style={{ width: '60px', height: '75px', borderRadius: '8px', objectFit: 'cover' }} />
+                    <div key={p.id} style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '10px', padding: '8px', borderRadius: '10px', background: '#FAF6FA' }}>
+                      <img src={p.image} alt={p.title} style={{ width: '50px', height: '60px', borderRadius: '6px', objectFit: 'cover' }} />
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: 600 }}>{p.title}</div>
-                        <div style={{ fontWeight: 700 }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
+                        <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{p.title}</div>
+                        <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
                       </div>
-                      <button className="btn-primary" style={{ padding: '8px 14px', fontSize: '0.8rem' }} onClick={() => { handleAddToCart(p); setWishlistIds(prev => prev.filter(id => id !== p.id)); }}>
+                      <button className="btn-primary" style={{ padding: '6px 12px', fontSize: '0.75rem' }} onClick={() => { handleAddToCart(p); setWishlistIds(prev => prev.filter(id => id !== p.id)); }}>
                         Panier
                       </button>
                     </div>
@@ -1540,27 +1536,27 @@
           {/* SEARCH MODAL */}
           {isSearchOpen && (
             <div className="modal-overlay" onClick={() => setIsSearchOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '540px' }} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={() => setIsSearchOpen(false)}>
-                  <Icon name="x" size={20} color="#2A172E" />
+                  <Icon name="x" size={18} color="#2A172E" />
                 </button>
-                <div style={{ padding: '28px' }}>
-                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', marginBottom: '14px' }}>Recherche Produit</h3>
+                <div style={{ padding: '24px' }}>
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem', marginBottom: '12px' }}>Recherche Produit</h3>
                   <input
                     type="text"
                     placeholder="Rechercher (ex: Body Wave, Coupe Carré, Frange, Éventail...)"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="form-input"
-                    style={{ width: '100%', marginBottom: '16px' }}
+                    style={{ width: '100%', marginBottom: '14px' }}
                     autoFocus
                   />
                   {searchedProducts.map(p => (
-                    <div key={p.id} onClick={() => { setQuickViewProduct(p); setIsSearchOpen(false); }} style={{ display: 'flex', gap: '12px', alignItems: 'center', padding: '8px', cursor: 'pointer' }}>
-                      <img src={p.image} alt={p.title} style={{ width: '45px', height: '55px', borderRadius: '6px', objectFit: 'cover' }} />
+                    <div key={p.id} onClick={() => { setQuickViewProduct(p); setIsSearchOpen(false); }} style={{ display: 'flex', gap: '10px', alignItems: 'center', padding: '6px', cursor: 'pointer' }}>
+                      <img src={p.image} alt={p.title} style={{ width: '40px', height: '50px', borderRadius: '6px', objectFit: 'cover' }} />
                       <div>
-                        <div style={{ fontWeight: 600 }}>{p.title}</div>
-                        <div style={{ fontSize: '0.85rem', color: '#6C5B70' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
+                        <div style={{ fontWeight: 600, fontSize: '0.88rem' }}>{p.title}</div>
+                        <div style={{ fontSize: '0.8rem', color: '#6C5B70' }}>{p.price.toLocaleString('fr-FR')} FCFA</div>
                       </div>
                     </div>
                   ))}
@@ -1573,7 +1569,7 @@
           <div className="toast-container">
             {toasts.map(t => (
               <div key={t.id} className="toast">
-                <Icon name={t.type === 'error' ? 'alert-triangle' : 'check'} size={18} color={t.type === 'error' ? '#E74C3C' : '#27AE60'} />
+                <Icon name={t.type === 'error' ? 'alert-triangle' : 'check'} size={16} color={t.type === 'error' ? '#E74C3C' : '#27AE60'} />
                 <span>{t.message}</span>
               </div>
             ))}
