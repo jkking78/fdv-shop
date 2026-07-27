@@ -110,9 +110,6 @@
           <path d="M7 11V7a5 5 0 0110 0v4" />
         </g>
       ),
-      'shield-check': (
-        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      ),
       'plus-circle': (
         <path d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
       ),
@@ -454,9 +451,6 @@
       const [quickViewProduct, setQuickViewProduct] = useState(null);
       const [activeModalImageIdx, setActiveModalImageIdx] = useState(0);
 
-      // APPLE STUDIO MODAL TAB STATE ('info', 'gallery', 'preview')
-      const [appleStudioTab, setAppleStudioTab] = useState('info');
-
       // EDIT PRODUCT STATE & PENDING TARGET
       const [editingProduct, setEditingProduct] = useState(null);
       const [pendingProductToEdit, setPendingProductToEdit] = useState(null);
@@ -555,7 +549,6 @@
           description: product.description || '',
           images: (product.images && product.images.length > 0) ? [...product.images] : [product.image]
         });
-        setAppleStudioTab('info');
         setIsAdminFormModalOpen(true);
       };
 
@@ -566,7 +559,7 @@
           sessionStorage.setItem('fdv_admin_auth', 'true');
           setIsAdminAuthModalOpen(false);
           setAdminPasswordInput('');
-          addToast('Connexion Studio Administrateur réussie.', 'info');
+          addToast('Connexion Propriétaire réussie.', 'info');
 
           if (pendingProductToEdit) {
             populateEditForm(pendingProductToEdit);
@@ -617,7 +610,6 @@
           description: '',
           images: []
         });
-        setAppleStudioTab('info');
         setIsAdminFormModalOpen(true);
       };
 
@@ -625,8 +617,7 @@
         if (e) e.preventDefault();
         if (!isAdminAuthenticated) return;
         if (!productFormData.title || !productFormData.price) {
-          addToast('Veuillez spécifier au moins un titre et un prix.', 'error');
-          setAppleStudioTab('info');
+          addToast('Veuillez remplir au moins le nom et le prix.', 'error');
           return;
         }
 
@@ -990,17 +981,17 @@
           {/* 5. ADMIN AUTH MODAL */}
           {isAdminAuthModalOpen && (
             <div className="modal-overlay" onClick={() => setIsAdminAuthModalOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '440px' }} onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '420px' }} onClick={(e) => e.stopPropagation()}>
                 <button className="modal-close-btn" onClick={() => setIsAdminAuthModalOpen(false)}>
                   <Icon name="x" size={20} color="#2A172E" />
                 </button>
-                <div style={{ padding: '32px', textAlign: 'center' }}>
+                <div style={{ padding: '28px', textAlign: 'center' }}>
                   <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#F7EBEF', color: '#2A172E', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                     <Icon name="lock" size={26} color="#2A172E" />
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
                   <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
-                    Saisissez votre mot de passe administrateur pour modifier ou ajouter des produits.
+                    Saisissez votre mot de passe administrateur.
                   </p>
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -1009,13 +1000,13 @@
                       placeholder="Mot de passe"
                       value={adminPasswordInput}
                       onChange={(e) => setAdminPasswordInput(e.target.value)}
-                      className="newsletter-input"
-                      style={{ width: '100%', textAlign: 'center', fontSize: '1rem' }}
+                      className="form-input"
+                      style={{ textAlign: 'center', fontSize: '1rem' }}
                       autoFocus
                       required
                     />
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                      <span>SE CONNECTER & ACCÉDER AU STUDIO</span>
+                      <span>ACCÉDER À L’ÉDITEUR</span>
                     </button>
                   </form>
                 </div>
@@ -1023,252 +1014,185 @@
             </div>
           )}
 
-          {/*  6. APPLE STUDIO PRODUCT MANAGEMENT MODAL (PRODUCT STUDIO UX) */}
+          {/* 6. CLEAN, PERFECTLY RESPONSIVE PRODUCT EDIT / ADD MODAL */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
-              <div className="apple-studio-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 
-                {/* APPLE STUDIO SEGMENTED CONTROL HEADER */}
-                <div className="apple-studio-header">
+                {/* MODAL HEADER */}
+                <div style={{ padding: '22px 24px 16px', borderBottom: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FBF8F5' }}>
                   <div>
-                    <span style={{ fontSize: '0.72rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
-                      APPLE PRODUCT STUDIO 
+                    <span style={{ fontSize: '0.7rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
+                      GESTION BOUTIQUE
                     </span>
                     <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: 'var(--purple-dark)' }}>
-                      {editingProduct ? 'Modifier l’Article' : 'Nouveau Produit'}
+                      {editingProduct ? 'Modifier l’Article' : 'Ajouter un Produit'}
                     </h3>
                   </div>
 
-                  <div className="apple-segmented-control">
-                    <button
-                      className={`apple-segment-btn ${appleStudioTab === 'info' ? 'active' : ''}`}
-                      onClick={() => setAppleStudioTab('info')}
-                    >
-                      <Icon name="edit" size={15} />
-                      <span>Infos Produit</span>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer' }}>
+                      Déconnexion
                     </button>
-
-                    <button
-                      className={`apple-segment-btn ${appleStudioTab === 'gallery' ? 'active' : ''}`}
-                      onClick={() => setAppleStudioTab('gallery')}
-                    >
-                      <Icon name="image" size={15} />
-                      <span>Photos ({productFormData.images.length}/4)</span>
-                    </button>
-
-                    <button
-                      className={`apple-segment-btn ${appleStudioTab === 'preview' ? 'active' : ''}`}
-                      onClick={() => setAppleStudioTab('preview')}
-                    >
-                      <Icon name="eye" size={15} />
-                      <span>Aperçu Studio</span>
+                    <button className="modal-close-btn" style={{ position: 'static' }} onClick={() => setIsAdminFormModalOpen(false)}>
+                      <Icon name="x" size={18} color="#2A172E" />
                     </button>
                   </div>
-
-                  <button className="modal-close-btn" style={{ position: 'static' }} onClick={() => setIsAdminFormModalOpen(false)}>
-                    <Icon name="x" size={18} color="#2A172E" />
-                  </button>
                 </div>
 
-                {/* APPLE STUDIO BODY CONTENT */}
-                <div className="apple-studio-body">
+                {/* MODAL SCROLLABLE FORM BODY */}
+                <div style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  
+                  <div>
+                    <label className="form-label">Titre / Nom du Produit *</label>
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="ex: Perruque Body Wave Taille 30"
+                      value={productFormData.title}
+                      onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
+                      required
+                    />
+                  </div>
 
-                  {/* TAB 1: PRODUCT INFO */}
-                  {appleStudioTab === 'info' && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                      <div className="apple-input-group" style={{ gridColumn: 'span 2' }}>
-                        <label className="apple-label">Titre / Nom du Produit *</label>
-                        <input
-                          type="text"
-                          className="apple-input"
-                          placeholder="ex: Perruque Body Wave Taille 30"
-                          value={productFormData.title}
-                          onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
-                          required
-                        />
-                      </div>
-
-                      <div className="apple-input-group">
-                        <label className="apple-label">Catégorie *</label>
-                        <select
-                          className="apple-input"
-                          value={productFormData.category}
-                          onChange={(e) => setProductFormData({ ...productFormData, category: e.target.value })}
-                        >
-                          <option value="Perruques & Mèches">Perruques & Mèches</option>
-                          <option value="Éventails en Pagne">Éventails en Pagne</option>
-                          <option value="Robes & Ensembles">Robes & Ensembles</option>
-                          <option value="Accessoires">Accessoires</option>
-                        </select>
-                      </div>
-
-                      <div className="apple-input-group">
-                        <label className="apple-label">Prix (FCFA) *</label>
-                        <input
-                          type="number"
-                          className="apple-input"
-                          placeholder="ex: 65000"
-                          value={productFormData.price}
-                          onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
-                          required
-                        />
-                      </div>
-
-                      <div className="apple-input-group">
-                        <label className="apple-label">Nombre en Stock Disponible *</label>
-                        <input
-                          type="number"
-                          min="0"
-                          className="apple-input"
-                          placeholder="ex: 10"
-                          value={productFormData.stock}
-                          onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
-                          required
-                        />
-                      </div>
-
-                      <div className="apple-input-group">
-                        <label className="apple-label">Badge Indicatif Image (Haut à Gauche)</label>
-                        <input
-                          type="text"
-                          className="apple-input"
-                          placeholder="ex: Top Vente, Nouveau, -20%, Luxe VIP"
-                          value={productFormData.badge}
-                          onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
-                        />
-                      </div>
-
-                      <div className="apple-input-group" style={{ gridColumn: 'span 2' }}>
-                        <label className="apple-label">Description du Produit</label>
-                        <textarea
-                          className="apple-input"
-                          rows="3"
-                          placeholder="Description soignée du produit..."
-                          value={productFormData.description}
-                          onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
-                          style={{ resize: 'none' }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* TAB 2: MULTI-PHOTO GALLERY (MAX 4 IMAGES) */}
-                  {appleStudioTab === 'gallery' && (
+                  <div className="form-grid-row">
                     <div>
-                      <div style={{ marginBottom: '16px' }}>
-                        <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--purple-dark)' }}>
-                          Galerie Photos ({productFormData.images.length}/4 Photos)
-                        </h4>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                          Ajoutez jusqu'à 4 photos HD pour permettre à vos clientes d'observer chaque angle sous son meilleur jour.
-                        </p>
-                      </div>
+                      <label className="form-label">Catégorie *</label>
+                      <select
+                        className="form-input"
+                        value={productFormData.category}
+                        onChange={(e) => setProductFormData({ ...productFormData, category: e.target.value })}
+                      >
+                        <option value="Perruques & Mèches">Perruques & Mèches</option>
+                        <option value="Éventails en Pagne">Éventails en Pagne</option>
+                        <option value="Robes & Ensembles">Robes & Ensembles</option>
+                        <option value="Accessoires">Accessoires</option>
+                      </select>
+                    </div>
 
-                      {productFormData.images.length < 4 && (
-                        <label className="apple-dropzone" style={{ marginBottom: '24px' }}>
-                          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
-                            <Icon name="upload-cloud" size={24} color="#5C3260" />
-                          </div>
-                          <div>
-                            <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--purple-dark)', display: 'block' }}>
-                              Déposer des photos ou Cliquer pour Sélectionner
-                            </span>
-                            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                              Formats supportés : JPG, PNG, WEBP (Max 4 photos)
-                            </span>
-                          </div>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleMultiImageFileChange}
-                            style={{ display: 'none' }}
-                          />
-                        </label>
-                      )}
+                    <div>
+                      <label className="form-label">Prix (FCFA) *</label>
+                      <input
+                        type="number"
+                        className="form-input"
+                        placeholder="ex: 65000"
+                        value={productFormData.price}
+                        onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
 
-                      {productFormData.images.length > 0 ? (
-                        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                  <div className="form-grid-row">
+                    <div>
+                      <label className="form-label">Nombre de Stock Disponible *</label>
+                      <input
+                        type="number"
+                        min="0"
+                        className="form-input"
+                        placeholder="ex: 10"
+                        value={productFormData.stock}
+                        onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="form-label">Indicatif Image (Haut à Gauche)</label>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="ex: Top Vente, Nouveau, -20%, Luxe VIP"
+                        value={productFormData.badge}
+                        onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  {/* MULTI-PHOTO UPLOADER (MAX 4 PHOTOS) */}
+                  <div>
+                    <label className="form-label">Photos de l'Article (Maximum 4 Photos) *</label>
+                    
+                    {productFormData.images.length < 4 && (
+                      <label className="file-upload-zone">
+                        <Icon name="upload-cloud" size={24} color="#5C3260" />
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
+                          📷 Ajouter des Photos ({productFormData.images.length}/4 chargees)
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                          Formats: JPG, PNG (Cliquer pour choisir)
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleMultiImageFileChange}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+                    )}
+
+                    {productFormData.images.length > 0 && (
+                      <div style={{ marginTop: '12px' }}>
+                        <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
+                          ✓ Photos enregistrées ({productFormData.images.length}/4) :
+                        </span>
+                        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                           {productFormData.images.map((imgSrc, idx) => (
-                            <div key={idx} className="apple-thumb-card">
-                              <img src={imgSrc} alt={`Photo ${idx+1}`} />
-                              {idx === 0 && <span className="apple-thumb-primary-badge">★ Principale</span>}
+                            <div key={idx} style={{ position: 'relative', width: '80px', height: '95px' }}>
+                              <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover', border: '1px solid rgba(226, 167, 180, 0.4)' }} />
+                              {idx === 0 && (
+                                <span style={{ position: 'absolute', bottom: '4px', left: '4px', right: '4px', background: 'rgba(42, 23, 46, 0.85)', color: '#FFF', fontSize: '0.6rem', textAlign: 'center', borderRadius: '6px', fontWeight: 700 }}>
+                                  ★ Principale
+                                </span>
+                              )}
                               <button
                                 type="button"
                                 onClick={() => handleRemoveFormImage(idx)}
-                                style={{ position: 'absolute', top: '6px', right: '6px', background: 'rgba(231, 76, 60, 0.9)', color: '#FFF', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 700 }}
                               >
                                 ✕
                               </button>
                             </div>
                           ))}
                         </div>
-                      ) : (
-                        <div style={{ fontStyle: 'italic', color: '#9B8F9E', textAlign: 'center', padding: '30px' }}>
-                          Aucune photo sélectionnée pour cet article.
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* TAB 3: APPLE REAL-TIME STUDIO PREVIEW */}
-                  {appleStudioTab === 'preview' && (
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <div style={{ width: '100%', maxWidth: '320px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#27AE60', display: 'block', textAlign: 'center', marginBottom: '12px' }}>
-                          ✓ Aperçu Fiche Studio en Temps Réel :
-                        </span>
-
-                        <div className="product-card">
-                          <div className="product-image-box">
-                            <span className="card-badge new">
-                              {productFormData.badge || 'Nouveau'}
-                            </span>
-
-                            <img
-                              src={(productFormData.images && productFormData.images[0]) || '/assets/wigs/bodywave-30.jpg'}
-                              alt="Aperçu Studio"
-                            />
-                          </div>
-
-                          <div className="product-info">
-                            <span className="product-category">{productFormData.category}</span>
-                            <div className="product-title-link">{productFormData.title || 'Titre du Produit'}</div>
-                            <div className="product-price-row">
-                              <span className="product-price">
-                                {productFormData.price ? parseFloat(productFormData.price).toLocaleString('fr-FR') : '0'} FCFA
-                              </span>
-                              <span className={`stock-pill ${parseInt(productFormData.stock, 10) === 0 ? 'no-stock' : 'in-stock'}`}>
-                                {parseInt(productFormData.stock, 10) === 0 ? 'Épuisé' : `${productFormData.stock || 0} en stock`}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="form-label">Description du Produit</label>
+                    <textarea
+                      className="form-input"
+                      rows="3"
+                      placeholder="Description soignée du produit..."
+                      value={productFormData.description}
+                      onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
+                      style={{ resize: 'none' }}
+                    />
+                  </div>
 
                 </div>
 
-                {/* APPLE STUDIO FOOTER ACTIONS BAR */}
-                <div className="apple-studio-footer">
+                {/* MODAL FOOTER */}
+                <div style={{ padding: '16px 24px', background: '#FBF8F5', borderTop: '1px solid rgba(226, 167, 180, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     {editingProduct && (
                       <button
                         type="button"
                         onClick={() => handleDeleteProduct(editingProduct.id)}
-                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '10px 18px', borderRadius: '14px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '10px 16px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer' }}
                       >
-                        Supprimer l'Article
+                        Supprimer
                       </button>
                     )}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ display: 'flex', gap: '10px' }}>
                     <button
                       type="button"
                       onClick={() => setIsAdminFormModalOpen(false)}
-                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '12px 24px', borderRadius: '16px', fontSize: '0.88rem', fontWeight: 600, cursor: 'pointer' }}
+                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '10px 18px', borderRadius: '14px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer' }}
                     >
                       Annuler
                     </button>
@@ -1277,10 +1201,10 @@
                       type="button"
                       onClick={handleSaveProduct}
                       className="btn-primary"
-                      style={{ padding: '12px 28px', borderRadius: '16px' }}
+                      style={{ padding: '10px 22px', borderRadius: '14px' }}
                     >
-                      <Icon name="check" size={18} color="#FFFFFF" />
-                      <span>{editingProduct ? 'Enregistrer les Modifications' : 'Publier l’Article'}</span>
+                      <Icon name="check" size={16} color="#FFFFFF" />
+                      <span>{editingProduct ? 'Enregistrer' : 'Publier'}</span>
                     </button>
                   </div>
                 </div>
@@ -1313,7 +1237,7 @@
                   <li>
                     {isAdminAuthenticated ? (
                       <button onClick={handleOpenNewProduct} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, color: '#27AE60', fontWeight: 700 }}>
-                        🔒 Apple Product Studio (Connecté)
+                        🔒 Studio Propriétaire (Connecté)
                       </button>
                     ) : (
                       <button onClick={() => setIsAdminAuthModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
@@ -1513,7 +1437,7 @@
                     placeholder="Rechercher (ex: Body Wave, Coupe Carré, Frange, Éventail...)"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="newsletter-input"
+                    className="form-input"
                     style={{ width: '100%', marginBottom: '16px' }}
                     autoFocus
                   />
