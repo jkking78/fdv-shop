@@ -662,9 +662,69 @@ body {
 }
 
 .product-price {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--purple-dark);
+}
+
+/* QUANTITY SELECTOR BOUNDED BY STOCK */
+.card-qty-selector {
+  display: inline-flex;
+  align-items: center;
+  background: #FAF6FA;
+  border: 1px solid rgba(226, 167, 180, 0.35);
+  border-radius: 12px;
+  padding: 2px 6px;
+}
+
+.card-qty-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--purple-dark);
+  cursor: pointer;
+  width: 22px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-qty-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.card-qty-value {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--purple-dark);
+  padding: 0 6px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.btn-add-cart-icon {
+  background: var(--purple-dark);
+  color: #FFFFFF;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.btn-add-cart-icon:hover {
+  background: var(--purple-accent);
+}
+
+.btn-add-cart-icon:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* COMPACT SLEEK WHATSAPP BUY ICON BUTTON ON EVERY CARD */
@@ -672,7 +732,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
   padding: 8px 12px;
   border-radius: 14px;
   background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
@@ -687,6 +747,11 @@ body {
 .btn-whatsapp-card:hover {
   transform: scale(1.06);
   box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+}
+
+.btn-whatsapp-card:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* 6. CLEAN PERFECTLY CENTERED RESPONSIVE MODAL */
@@ -859,7 +924,7 @@ body {
   text-align: center;
   background: rgba(247, 235, 239, 0.4);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   display: flex;
   flex-direction: column;
   align-items: center;

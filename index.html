@@ -436,6 +436,19 @@
       const [wishlistIds, setWishlistIds] = useState(['wig-1', 'eventail-1']);
       const [toasts, setToasts] = useState([]);
 
+      // ITEM QUANTITY SELECTION STATE (SYNCED WITH STOCK)
+      const [selectedQuantities, setSelectedQuantities] = useState({});
+
+      const getSelectedQty = (productId) => selectedQuantities[productId] || 1;
+
+      const updateSelectedQty = (product, delta) => {
+        const current = selectedQuantities[product.id] || 1;
+        const maxStock = product.stock !== undefined ? product.stock : 1;
+        if (maxStock === 0) return;
+        const next = Math.max(1, Math.min(maxStock, current + delta));
+        setSelectedQuantities(prev => ({ ...prev, [product.id]: next }));
+      };
+
       const [searchQuery, setSearchQuery] = useState('');
 
       const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
@@ -704,20 +717,21 @@
         setIsAdminFormModalOpen(false);
       };
 
-      // WHATSAPP REDIRECTION SYSTEM WITH DYNAMIC ITEM DIRECT LINKS
+      // WHATSAPP REDIRECTION SYSTEM WITH DYNAMIC ITEM DIRECT LINKS & QUANTITIES
       const handleOrderOnWhatsApp = (cartItems, clientInfo = {}) => {
         const baseUrl = window.location.origin + window.location.pathname;
         let msg = `Bonjour FDV shopping ! Je souhaite commander les articles suivants :\n\n`;
         
         cartItems.forEach((item, idx) => {
           const itemUrl = `${baseUrl}?product=${item.id}`;
+          const q = item.quantity || 1;
           msg += `${idx + 1}. *${item.title}*\n`;
           msg += `   🔗 Lien: ${itemUrl}\n`;
-          msg += `   - Quantité: ${item.quantity}\n`;
-          msg += `   - Prix: ${(item.price * item.quantity).toLocaleString('fr-FR')} FCFA\n\n`;
+          msg += `   - Quantité: ${q}\n`;
+          msg += `   - Prix: ${(item.price * q).toLocaleString('fr-FR')} FCFA\n\n`;
         });
         
-        const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0);
+        const total = cartItems.reduce((a, c) => a + c.price * (c.quantity || 1), 0);
         msg += `💰 *TOTAL À REGLER : ${total.toLocaleString('fr-FR')} FCFA*\n\n`;
 
         if (clientInfo.name) msg += `👤 Nom Client: ${clientInfo.name}\n`;
@@ -749,19 +763,20 @@
         }
         const size = productToAdd.selectedSize || productToAdd.sizes?.[0] || 'Unique';
         const color = productToAdd.selectedColor || (productToAdd.colors?.[0] ? productToAdd.colors[0].name : 'Unique');
-        const qty = productToAdd.quantity || 1;
+        const qty = productToAdd.quantity || getSelectedQty(productToAdd.id) || 1;
 
         setCart(prev => {
           const idx = prev.findIndex(item => item.id === productToAdd.id && item.selectedSize === size && item.selectedColor === color);
           if (idx > -1) {
             const updated = [...prev];
-            updated[idx].quantity += qty;
+            const newQty = Math.min(productToAdd.stock, updated[idx].quantity + qty);
+            updated[idx].quantity = newQty;
             return updated;
           }
           return [...prev, { ...productToAdd, selectedSize: size, selectedColor: color, quantity: qty }];
         });
 
-        addToast(`"${productToAdd.title}" ajouté au panier.`, 'cart');
+        addToast(`"${productToAdd.title}" (${qty}) ajouté au panier.`, 'cart');
         setIsCartOpen(true);
       };
 
@@ -932,6 +947,7 @@
                 const isWishlisted = wishlistIds.includes(product.id);
                 const isOutOfStock = product.stock === 0;
                 const displayImage = (product.images && product.images.length > 0) ? product.images[0] : product.image;
+                const currentSelectedQty = getSelectedQty(product.id);
                 return (
                   <div key={product.id} className="product-card">
                     <div className="product-image-box">
@@ -977,26 +993,62 @@
                         {product.title}
                       </a>
                       
-                      <div className="product-price-row">
-                        <div>
-                          <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
-                          <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`} style={{ marginLeft: '6px' }}>
-                            {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
-                          </span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
+                        <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
+                          {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
+                        </span>
+                      </div>
+
+                      {/* STOCK-SYNCED QUANTITY SELECTOR & COMPACT BUY BUTTONS */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', gap: '8px' }}>
+                        <div className="card-qty-selector">
+                          <button
+                            type="button"
+                            className="card-qty-btn"
+                            onClick={(e) => { e.stopPropagation(); updateSelectedQty(product, -1); }}
+                            disabled={isOutOfStock || currentSelectedQty <= 1}
+                          >
+                            -
+                          </button>
+                          <span className="card-qty-value">{isOutOfStock ? 0 : currentSelectedQty}</span>
+                          <button
+                            type="button"
+                            className="card-qty-btn"
+                            onClick={(e) => { e.stopPropagation(); updateSelectedQty(product, 1); }}
+                            disabled={isOutOfStock || currentSelectedQty >= product.stock}
+                          >
+                            +
+                          </button>
                         </div>
 
-                        {/* COMPACT WHATSAPP BUY ICON BUTTON (WHATSAPP + SHOPPING BAG ICON) */}
-                        <button
-                          className="btn-whatsapp-card"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOrderOnWhatsApp([{ ...product, quantity: 1 }]);
-                          }}
-                          title="Commander immédiatement via WhatsApp"
-                        >
-                          <Icon name="whatsapp" size={18} color="#FFFFFF" />
-                          <Icon name="shopping-bag" size={15} color="#FFFFFF" />
-                        </button>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <button
+                            type="button"
+                            className="btn-add-cart-icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddToCart({ ...product, quantity: currentSelectedQty });
+                            }}
+                            disabled={isOutOfStock}
+                            title="Ajouter cette quantité au panier"
+                          >
+                            <Icon name="shopping-bag" size={16} color="#FFFFFF" />
+                          </button>
+
+                          <button
+                            type="button"
+                            className="btn-whatsapp-card"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOrderOnWhatsApp([{ ...product, quantity: currentSelectedQty }]);
+                            }}
+                            disabled={isOutOfStock}
+                            title="Commander cette quantité sur WhatsApp"
+                          >
+                            <Icon name="whatsapp" size={18} color="#FFFFFF" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1313,7 +1365,7 @@
                             <div className="qty-controls">
                               <button className="qty-btn" onClick={() => handleUpdateQty(item, item.quantity - 1)}>-</button>
                               <span>{item.quantity}</span>
-                              <button className="qty-btn" onClick={() => handleUpdateQty(item, item.quantity + 1)}>+</button>
+                              <button className="qty-btn" onClick={() => handleUpdateQty(item, Math.min(item.stock || 99, item.quantity + 1))}>+</button>
                             </div>
                             <div style={{ fontWeight: 700, color: 'var(--purple-dark)' }}>{(item.price * item.quantity).toLocaleString('fr-FR')} FCFA</div>
                           </div>
@@ -1397,7 +1449,7 @@
                         {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
                       </div>
                       <span className={`stock-pill ${quickViewProduct.stock === 0 ? 'no-stock' : quickViewProduct.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
-                        {quickViewProduct.stock === 0 ? 'Épuisé' : `${quickViewProduct.stock} en stock`}
+                        {quickViewProduct.stock === 0 ? 'Épuisé' : `${quickViewProduct.stock} disponible(s)`}
                       </span>
                     </div>
 
@@ -1406,15 +1458,41 @@
                         {quickViewProduct.description}
                       </p>
                     </div>
+
+                    {/* QUANTITY SELECTOR IN QUICK VIEW MODAL */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--purple-dark)' }}>Quantité désirée :</span>
+                      <div className="card-qty-selector" style={{ padding: '4px 10px' }}>
+                        <button
+                          type="button"
+                          className="card-qty-btn"
+                          onClick={() => updateSelectedQty(quickViewProduct, -1)}
+                          disabled={quickViewProduct.stock === 0 || getSelectedQty(quickViewProduct.id) <= 1}
+                        >
+                          -
+                        </button>
+                        <span className="card-qty-value">{quickViewProduct.stock === 0 ? 0 : getSelectedQty(quickViewProduct.id)}</span>
+                        <button
+                          type="button"
+                          className="card-qty-btn"
+                          onClick={() => updateSelectedQty(quickViewProduct, 1)}
+                          disabled={quickViewProduct.stock === 0 || getSelectedQty(quickViewProduct.id) >= quickViewProduct.stock}
+                        >
+                          +
+                        </button>
+                      </div>
+                      <span style={{ fontSize: '0.78rem', color: '#6C5B70' }}>(Max stock: {quickViewProduct.stock})</span>
+                    </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: 'auto' }}>
                       <button
                         className="btn-whatsapp"
                         style={{ width: '100%', justifyContent: 'center', padding: '14px' }}
-                        onClick={() => handleOrderOnWhatsApp([{ ...quickViewProduct, quantity: 1 }])}
+                        onClick={() => handleOrderOnWhatsApp([{ ...quickViewProduct, quantity: getSelectedQty(quickViewProduct.id) }])}
+                        disabled={quickViewProduct.stock === 0}
                       >
                         <Icon name="whatsapp" size={20} color="#FFFFFF" />
-                        <span>Commander cet article sur WhatsApp</span>
+                        <span>Commander ({getSelectedQty(quickViewProduct.id)}) sur WhatsApp</span>
                       </button>
 
                       <button
@@ -1424,7 +1502,7 @@
                         disabled={quickViewProduct.stock === 0}
                       >
                         <Icon name="shopping-bag" size={18} color="#FFFFFF" />
-                        <span>{quickViewProduct.stock === 0 ? 'Article Épuisé' : 'Ajouter au Panier'}</span>
+                        <span>{quickViewProduct.stock === 0 ? 'Article Épuisé' : `Ajouter (${getSelectedQty(quickViewProduct.id)}) au Panier`}</span>
                       </button>
                     </div>
                   </div>
