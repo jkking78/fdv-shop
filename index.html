@@ -50,6 +50,13 @@
     const ADMIN_SECRET = 'FDV2026!Admin';
     const WHATSAPP_PHONE = '2250778739527';
 
+    // DEFAULT PROMO CODES
+    const DEFAULT_PROMO_CODES = [
+      { id: 'promo-1', code: 'FDV10', discountType: 'percent', value: 10, isActive: true, description: '10% de réduction sur tout le site' },
+      { id: 'promo-2', code: 'ELEGANCE15', discountType: 'percent', value: 15, isActive: true, description: '15% de réduction spéciale' },
+      { id: 'promo-3', code: 'FDV5000', discountType: 'fixed', value: 5000, isActive: true, description: '5 000 FCFA offerts' }
+    ];
+
     // FIREBASE CLOUD CONFIGURATION
     const firebaseConfig = {
       apiKey: "AIzaSyFDV_SHOPPING_PROD_KEY",
@@ -125,6 +132,9 @@
       'upload-cloud': (
         <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
       ),
+      tag: (
+        <path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+      ),
       whatsapp: (
         <path fill="currentColor" stroke="none" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.43-9.874 9.877-9.874 2.637 0 5.116 1.028 6.98 2.893A9.8 9.8 0 0121.854 12c0 5.447-4.429 9.877-9.874 9.877m0-18.177C6.07 3.608 1.48 8.198 1.48 13.8a10.14 10.14 0 001.55 5.42L0 24l4.908-1.288a10.17 10.17 0 005.289 1.474c5.727 0 10.387-4.66 10.387-10.386 0-2.772-1.08-5.378-3.04-7.338A10.3 10.3 0 0012.051 3.608" />
       ),
@@ -165,9 +175,10 @@
         title: 'Body Wave Taille 30',
         category: 'Perruques & Mèches',
         price: 65000,
+        originalPrice: 75000,
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
-        badge: 'Nouveau',
+        badge: '-13%',
         stock: 5,
         images: ['/assets/wigs/bodywave-30.jpg', '/assets/wigs/lisse-30.jpg', '/assets/wigs/deepwave-30.jpg'],
         image: '/assets/wigs/bodywave-30.jpg',
@@ -183,6 +194,7 @@
         title: 'Coupe Carré SDD Taille 12',
         category: 'Perruques & Mèches',
         price: 38000,
+        originalPrice: 42000,
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Top Vente',
@@ -273,6 +285,7 @@
         title: 'Deep Wave Taille 30',
         category: 'Perruques & Mèches',
         price: 67000,
+        originalPrice: 75000,
         currencySymbol: 'FCFA',
         installmentText: 'Disponible en plusieurs couleurs',
         badge: 'Luxe VIP',
@@ -426,6 +439,32 @@
 
       const [activeCategory, setActiveCategory] = useState('Perruques & Mèches');
 
+      // PROMO CODES MANAGEMENT STATE (SAVED IN LOCAL STORAGE & PRE-FILLED WITH DEFAULTS)
+      const [promoCodesList, setPromoCodesList] = useState(() => {
+        const saved = localStorage.getItem('fdv_promo_codes');
+        if (saved) {
+          try { return JSON.parse(saved); } catch(e) {}
+        }
+        return DEFAULT_PROMO_CODES;
+      });
+
+      useEffect(() => {
+        localStorage.setItem('fdv_promo_codes', JSON.stringify(promoCodesList));
+      }, [promoCodesList]);
+
+      // APPLIED PROMO IN CART
+      const [appliedPromo, setAppliedPromo] = useState(null);
+      const [promoInputCode, setPromoInputCode] = useState('');
+      const [promoMessage, setPromoMessage] = useState({ text: '', type: '' });
+
+      // NEW PROMO CREATION FORM IN ADMIN MODAL
+      const [newPromoData, setNewPromoData] = useState({
+        code: '',
+        discountType: 'percent',
+        value: 10,
+        description: ''
+      });
+
       // INITIALIZE CART AND WISHLIST EMPTY FOR NEW VISITORS
       const [cart, setCart] = useState(() => {
         const saved = localStorage.getItem('fdv_cart');
@@ -488,12 +527,13 @@
       const [editingProduct, setEditingProduct] = useState(null);
       const [pendingProductToEdit, setPendingProductToEdit] = useState(null);
 
-      // NEW / EDIT PRODUCT FORM DATA (MAX 4 IMAGES)
+      // NEW / EDIT PRODUCT FORM DATA (MAX 4 IMAGES & OPTIONAL ORIGINAL PRICE)
       const [productFormData, setProductFormData] = useState({
         id: null,
         title: '',
         category: 'Perruques & Mèches',
         price: '',
+        originalPrice: '',
         stock: 5,
         badge: 'Nouveau',
         installmentText: 'Disponible en plusieurs couleurs',
@@ -540,6 +580,65 @@
         setTimeout(() => {
           setToasts(prev => prev.filter(t => t.id !== id));
         }, 3500);
+      };
+
+      // PROMO CODE APPLICATION HANDLER
+      const handleApplyPromoCode = (e) => {
+        if (e) e.preventDefault();
+        setPromoMessage({ text: '', type: '' });
+
+        const cleanCode = String(promoInputCode || '').trim().toUpperCase();
+        if (!cleanCode) {
+          setPromoMessage({ text: 'Veuillez saisir un code promo.', type: 'error' });
+          return;
+        }
+
+        const matched = promoCodesList.find(p => p.code.toUpperCase() === cleanCode && p.isActive);
+        if (matched) {
+          setAppliedPromo(matched);
+          const discText = matched.discountType === 'percent' ? `-${matched.value}%` : `-${matched.value.toLocaleString('fr-FR')} FCFA`;
+          setPromoMessage({ text: `✓ Code ${matched.code} appliqué (${discText}) !`, type: 'success' });
+          addToast(`Code promo "${matched.code}" appliqué !`, 'info');
+        } else {
+          setAppliedPromo(null);
+          setPromoMessage({ text: 'Code promo invalide ou expiré.', type: 'error' });
+        }
+      };
+
+      const handleRemoveAppliedPromo = () => {
+        setAppliedPromo(null);
+        setPromoInputCode('');
+        setPromoMessage({ text: '', type: '' });
+        addToast('Code promo retiré.', 'info');
+      };
+
+      const handleCreatePromoCode = (e) => {
+        if (e) e.preventDefault();
+        if (!newPromoData.code || !newPromoData.value) {
+          addToast('Veuillez renseigner le code et la valeur.', 'error');
+          return;
+        }
+
+        const cleanCode = String(newPromoData.code).trim().toUpperCase();
+        const promoPayload = {
+          id: `promo-${Date.now()}`,
+          code: cleanCode,
+          discountType: newPromoData.discountType,
+          value: parseFloat(newPromoData.value) || 0,
+          isActive: true,
+          description: newPromoData.description || `Réduction de ${newPromoData.value}${newPromoData.discountType === 'percent' ? '%' : ' FCFA'}`
+        };
+
+        const updatedPromos = [promoPayload, ...promoCodesList];
+        setPromoCodesList(updatedPromos);
+        setNewPromoData({ code: '', discountType: 'percent', value: 10, description: '' });
+        addToast(`Code promo "${cleanCode}" créé avec succès !`, 'info');
+      };
+
+      const handleDeletePromoCode = (promoId) => {
+        const updated = promoCodesList.filter(p => p.id !== promoId);
+        setPromoCodesList(updated);
+        addToast('Code promo supprimé.', 'info');
       };
 
       const handleMultiImageFileChange = (e) => {
@@ -589,6 +688,7 @@
           title: product.title || '',
           category: product.category || 'Perruques & Mèches',
           price: product.price || '',
+          originalPrice: product.originalPrice || '',
           stock: product.stock !== undefined ? product.stock : 5,
           badge: product.badge || 'Nouveau',
           installmentText: product.installmentText || 'Disponible en plusieurs couleurs',
@@ -620,6 +720,7 @@
               title: '',
               category: 'Perruques & Mèches',
               price: '',
+              originalPrice: '',
               stock: 5,
               badge: 'Nouveau',
               installmentText: 'Disponible en plusieurs couleurs',
@@ -669,6 +770,7 @@
           title: '',
           category: 'Perruques & Mèches',
           price: '',
+          originalPrice: '',
           stock: 5,
           badge: 'Nouveau',
           installmentText: 'Disponible en plusieurs couleurs',
@@ -699,6 +801,7 @@
           title: cleanTitle,
           category: productFormData.category,
           price: Math.abs(parseFloat(productFormData.price)) || 0,
+          originalPrice: productFormData.originalPrice ? Math.abs(parseFloat(productFormData.originalPrice)) : null,
           currencySymbol: 'FCFA',
           stock: Math.max(0, parseInt(productFormData.stock, 10) || 0),
           installmentText: productFormData.installmentText || 'Produit en Stock',
@@ -756,7 +859,7 @@
         setIsAdminFormModalOpen(false);
       };
 
-      // WHATSAPP REDIRECTION SYSTEM WITH DYNAMIC ITEM DIRECT LINKS & QUANTITIES
+      // WHATSAPP REDIRECTION SYSTEM WITH DYNAMIC ITEM DIRECT LINKS, QUANTITIES & PROMO DETAILS
       const handleOrderOnWhatsApp = (cartItems, clientInfo = {}) => {
         const baseUrl = window.location.origin + window.location.pathname;
         let msg = `Bonjour FDV shopping ! Je souhaite commander les articles suivants :\n\n`;
@@ -770,8 +873,24 @@
           msg += `   - Prix: ${(item.price * q).toLocaleString('fr-FR')} FCFA\n\n`;
         });
         
-        const total = cartItems.reduce((a, c) => a + c.price * (c.quantity || 1), 0);
-        msg += `💰 *TOTAL À REGLER : ${total.toLocaleString('fr-FR')} FCFA*\n\n`;
+        const rawSubtotal = cartItems.reduce((a, c) => a + c.price * (c.quantity || 1), 0);
+        let discountAmount = 0;
+
+        if (appliedPromo) {
+          if (appliedPromo.discountType === 'percent') {
+            discountAmount = Math.round((rawSubtotal * appliedPromo.value) / 100);
+          } else {
+            discountAmount = appliedPromo.value;
+          }
+        }
+
+        const finalTotal = Math.max(0, rawSubtotal - discountAmount);
+
+        msg += `💵 Sous-total : ${rawSubtotal.toLocaleString('fr-FR')} FCFA\n`;
+        if (appliedPromo) {
+          msg += `🎟️ Code Promo : *${appliedPromo.code}* (-${discountAmount.toLocaleString('fr-FR')} FCFA)\n`;
+        }
+        msg += `💰 *TOTAL FINAL À RÉGLER : ${finalTotal.toLocaleString('fr-FR')} FCFA*\n\n`;
 
         if (clientInfo.name) msg += `👤 Nom Client: ${clientInfo.name}\n`;
         if (clientInfo.address) msg += `📍 Adresse/Ville de livraison: ${clientInfo.address}\n`;
@@ -849,6 +968,18 @@
       };
 
       const subtotal = cart.reduce((a, c) => a + c.price * c.quantity, 0);
+
+      let discountCalculated = 0;
+      if (appliedPromo) {
+        if (appliedPromo.discountType === 'percent') {
+          discountCalculated = Math.round((subtotal * appliedPromo.value) / 100);
+        } else {
+          discountCalculated = appliedPromo.value;
+        }
+      }
+
+      const totalAfterDiscount = Math.max(0, subtotal - discountCalculated);
+
       const wishlistProducts = productsList.filter(p => wishlistIds.includes(p.id));
 
       const isAnyModalActive = isAdminFormModalOpen || quickViewProduct || isCartOpen || isWishlistOpen || isSearchOpen || isAdminAuthModalOpen;
@@ -882,7 +1013,7 @@
           {/* 1. TOP ANNOUNCEMENT BAR */}
           <div className="announcement-bar">
             <div className="announcement-content">
-              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) • Commandes WhatsApp: 07 78 73 95 27</span>
+              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) • Code Promo : FDV10 (-10%) • WhatsApp: 07 78 73 95 27</span>
             </div>
           </div>
 
@@ -1060,7 +1191,14 @@
                       </a>
                       
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                        <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
+                        <div>
+                          <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
+                          {product.originalPrice && (
+                            <span style={{ fontSize: '0.78rem', color: '#9B8F9E', textDecoration: 'line-through', marginLeft: '6px' }}>
+                              {product.originalPrice.toLocaleString('fr-FR')} FCFA
+                            </span>
+                          )}
+                        </div>
                         <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
                           {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
                         </span>
@@ -1177,10 +1315,10 @@
             </div>
           )}
 
-          {/* 6. MODERN INTUITIVE ADMIN PRODUCT CREATOR / EDITOR MODAL */}
+          {/* 6. MODERN INTUITIVE ADMIN PRODUCT CREATOR / EDITOR & PROMO MANAGEMENT MODAL */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '640px' }} onClick={(e) => e.stopPropagation()}>
+              <div className="modal-content" style={{ maxWidth: '680px' }} onClick={(e) => e.stopPropagation()}>
                 
                 {/* 1. ELEGANT HEADER */}
                 <div style={{ padding: '20px 24px', background: 'linear-gradient(135deg, #1F1522 0%, #3D2042 100%)', color: '#FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid rgba(226, 167, 180, 0.3)' }}>
@@ -1189,7 +1327,7 @@
                       STUDIO PROPRIÉTAIRE FDV
                     </span>
                     <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.45rem', margin: 0, color: '#FFFFFF' }}>
-                      {editingProduct ? 'Modifier l’Article' : 'Ajouter un Nouvel Article'}
+                      {editingProduct ? 'Modifier l’Article' : 'Gestion Boutique & Nouveaux Articles'}
                     </h3>
                   </div>
 
@@ -1243,11 +1381,11 @@
                     </div>
                   </div>
 
-                  {/* CARD 2: PRIX, STOCK & ÉCUSSON */}
+                  {/* CARD 2: PRIX, PRIX BARRÉ (RÉDUCTION), STOCK & ÉCUSSON */}
                   <div className="admin-editor-section-card">
                     <div className="admin-section-header">
                       <span style={{ fontSize: '1.1rem' }}>💰</span>
-                      <span className="admin-section-title">2. Tarification & Stock</span>
+                      <span className="admin-section-title">2. Tarification, Réductions & Stock</span>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -1264,6 +1402,19 @@
                       </div>
 
                       <div>
+                        <label className="admin-form-label">Ancien Prix Barré (Optionnel FCFA)</label>
+                        <input
+                          type="number"
+                          className="admin-form-input"
+                          placeholder="ex: 75000 (Affiche une réduction)"
+                          value={productFormData.originalPrice}
+                          onChange={(e) => setProductFormData({ ...productFormData, originalPrice: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div>
                         <label className="admin-form-label">Quantité en Stock *</label>
                         <input
                           type="number"
@@ -1275,38 +1426,39 @@
                           required
                         />
                       </div>
+
+                      <div>
+                        <label className="admin-form-label">Badge Image (Haut à Gauche)</label>
+                        <input
+                          type="text"
+                          className="admin-form-input"
+                          placeholder="ex: Top Vente, Nouveau, -20%"
+                          value={productFormData.badge}
+                          onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
+                        />
+                      </div>
                     </div>
 
-                    <div>
-                      <label className="admin-form-label">Badge Image (Haut à Gauche)</label>
-                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
-                        {['Nouveau', 'Top Vente', 'Offre Spéciale', 'Populaire', 'Luxe VIP'].map(presetBadge => (
-                          <button
-                            type="button"
-                            key={presetBadge}
-                            onClick={() => setProductFormData({ ...productFormData, badge: presetBadge })}
-                            style={{
-                              padding: '4px 10px',
-                              borderRadius: '12px',
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              border: '1px solid rgba(226, 167, 180, 0.4)',
-                              background: productFormData.badge === presetBadge ? 'var(--purple-dark)' : '#FFFFFF',
-                              color: productFormData.badge === presetBadge ? '#FFFFFF' : 'var(--purple-dark)'
-                            }}
-                          >
-                            {presetBadge}
-                          </button>
-                        ))}
-                      </div>
-                      <input
-                        type="text"
-                        className="admin-form-input"
-                        placeholder="ou saisissez un badge personnalisé (ex: -20%)"
-                        value={productFormData.badge}
-                        onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
-                      />
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {['Nouveau', 'Top Vente', 'Offre Spéciale', '-15%', '-20%', 'Luxe VIP'].map(presetBadge => (
+                        <button
+                          type="button"
+                          key={presetBadge}
+                          onClick={() => setProductFormData({ ...productFormData, badge: presetBadge })}
+                          style={{
+                            padding: '4px 10px',
+                            borderRadius: '12px',
+                            fontSize: '0.75rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            border: '1px solid rgba(226, 167, 180, 0.4)',
+                            background: productFormData.badge === presetBadge ? 'var(--purple-dark)' : '#FFFFFF',
+                            color: productFormData.badge === presetBadge ? '#FFFFFF' : 'var(--purple-dark)'
+                          }}
+                        >
+                          {presetBadge}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
@@ -1389,6 +1541,85 @@
                     </div>
                   </div>
 
+                  {/* CARD 5: DEDICATED PROMO CODES MANAGEMENT (ADMIN CREATION & DELETION) */}
+                  <div className="admin-editor-section-card" style={{ background: '#FAF6FA', border: '1px solid rgba(212, 175, 55, 0.4)' }}>
+                    <div className="admin-section-header">
+                      <span style={{ fontSize: '1.1rem' }}>🎟️</span>
+                      <span className="admin-section-title" style={{ color: 'var(--purple-dark)' }}>
+                        5. Gestion des Codes Promos & Réductions Périodiques
+                      </span>
+                    </div>
+
+                    {/* CREATE NEW PROMO CODE FORM */}
+                    <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '14px', border: '1px solid rgba(226, 167, 180, 0.3)' }}>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--purple-dark)', display: 'block', marginBottom: '10px' }}>
+                        + Créer un nouveau Code Promo
+                      </span>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '8px' }}>
+                        <input
+                          type="text"
+                          className="admin-form-input"
+                          placeholder="Code (ex: BEAUTE20)"
+                          value={newPromoData.code}
+                          onChange={(e) => setNewPromoData({ ...newPromoData, code: e.target.value })}
+                        />
+                        <select
+                          className="admin-form-input"
+                          value={newPromoData.discountType}
+                          onChange={(e) => setNewPromoData({ ...newPromoData, discountType: e.target.value })}
+                        >
+                          <option value="percent">Pourcentage (- %)</option>
+                          <option value="fixed">Montant Fixe (- FCFA)</option>
+                        </select>
+                        <input
+                          type="number"
+                          className="admin-form-input"
+                          placeholder="Valeur (ex: 20 ou 5000)"
+                          value={newPromoData.value}
+                          onChange={(e) => setNewPromoData({ ...newPromoData, value: e.target.value })}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleCreatePromoCode}
+                        className="btn-primary"
+                        style={{ width: '100%', justifyContent: 'center', padding: '8px', borderRadius: '12px', fontSize: '0.8rem' }}
+                      >
+                        <Icon name="tag" size={14} color="#FFFFFF" />
+                        <span>Créer & Activer le Code Promo</span>
+                      </button>
+                    </div>
+
+                    {/* ACTIVE PROMO CODES LIST */}
+                    <div>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#6C5B70', display: 'block', marginBottom: '8px' }}>
+                        Codes Promos Actuellement Actifs ({promoCodesList.length}) :
+                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {promoCodesList.map(promo => (
+                          <div key={promo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FFFFFF', padding: '8px 12px', borderRadius: '12px', border: '1px solid rgba(226, 167, 180, 0.3)' }}>
+                            <div>
+                              <span style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--purple-dark)', letterSpacing: '0.5px' }}>
+                                🎟️ {promo.code}
+                              </span>
+                              <span style={{ fontSize: '0.75rem', color: '#27AE60', fontWeight: 700, marginLeft: '8px' }}>
+                                ({promo.discountType === 'percent' ? `-${promo.value}%` : `-${promo.value.toLocaleString('fr-FR')} FCFA`})
+                              </span>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePromoCode(promo.id)}
+                              style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', width: '26px', height: '26px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                              title="Supprimer ce code"
+                            >
+                              <Icon name="trash-2" size={14} color="#E74C3C" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
 
                 {/* 3. MODAL FOOTER */}
@@ -1411,7 +1642,7 @@
                       onClick={() => setIsAdminFormModalOpen(false)}
                       style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '10px 18px', borderRadius: '14px', fontSize: '0.84rem', fontWeight: 700, cursor: 'pointer' }}
                     >
-                      Annuler
+                      Fermer
                     </button>
 
                     <button
@@ -1478,7 +1709,7 @@
             </div>
           </footer>
 
-          {/* HAUTE COUTURE LUXURY CART DRAWER */}
+          {/* HAUTE COUTURE LUXURY CART DRAWER WITH PROMO CODE SYSTEM */}
           {isCartOpen && (
             <>
               <div className="cart-overlay" onClick={() => setIsCartOpen(false)}></div>
@@ -1566,14 +1797,58 @@
                   )}
                 </div>
 
-                {/* 4. LUXURY SUMMARY & WHATSAPP CHECKOUT FOOTER */}
+                {/* 4. PROMO CODE FIELD & SUMMARY FOOTER */}
                 {cart.length > 0 && (
                   <div className="cart-footer-luxury">
+                    
+                    {/* PROMO CODE INPUT BOX */}
+                    <div style={{ background: '#FAF6FA', padding: '12px 14px', borderRadius: '16px', border: '1px solid rgba(226, 167, 180, 0.3)', marginBottom: '12px' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--purple-dark)', display: 'block', marginBottom: '6px' }}>
+                        🎟️ Possédez-vous un Code Promo ?
+                      </span>
+
+                      {appliedPromo ? (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#D4EFDF', color: '#196F3D', padding: '8px 12px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 800 }}>
+                          <span>✓ Code {appliedPromo.code} appliqué ({appliedPromo.discountType === 'percent' ? `-${appliedPromo.value}%` : `-${appliedPromo.value.toLocaleString('fr-FR')} FCFA`})</span>
+                          <button onClick={handleRemoveAppliedPromo} style={{ background: 'none', border: 'none', color: '#E74C3C', fontWeight: 800, cursor: 'pointer', marginLeft: '8px' }}>
+                            ✕
+                          </button>
+                        </div>
+                      ) : (
+                        <form onSubmit={handleApplyPromoCode} style={{ display: 'flex', gap: '6px' }}>
+                          <input
+                            type="text"
+                            placeholder="ex: FDV10"
+                            value={promoInputCode}
+                            onChange={(e) => setPromoInputCode(e.target.value)}
+                            style={{ flex: 1, padding: '8px 12px', borderRadius: '12px', border: '1px solid rgba(226, 167, 180, 0.4)', fontSize: '0.85rem', textTransform: 'uppercase', outline: 'none' }}
+                          />
+                          <button type="submit" className="btn-primary" style={{ padding: '8px 14px', borderRadius: '12px', fontSize: '0.78rem' }}>
+                            Appliquer
+                          </button>
+                        </form>
+                      )}
+
+                      {promoMessage.text && !appliedPromo && (
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: promoMessage.type === 'error' ? '#E74C3C' : '#27AE60', display: 'block', marginTop: '6px' }}>
+                          {promoMessage.text}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* PRICE SUMMARY BREAKDOWN */}
                     <div style={{ background: '#FAF6FA', padding: '14px 16px', borderRadius: '16px', border: '1px solid rgba(226, 167, 180, 0.25)', marginBottom: '16px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#6C5B70', marginBottom: '6px' }}>
                         <span>Sous-total articles ({cart.reduce((a, c) => a + c.quantity, 0)})</span>
                         <span style={{ fontWeight: 700, color: 'var(--purple-dark)' }}>{subtotal.toLocaleString('fr-FR')} FCFA</span>
                       </div>
+
+                      {appliedPromo && (
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#27AE60', fontWeight: 700, marginBottom: '6px' }}>
+                          <span>Réduction ({appliedPromo.code})</span>
+                          <span>-{discountCalculated.toLocaleString('fr-FR')} FCFA</span>
+                        </div>
+                      )}
                       
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', color: '#6C5B70', marginBottom: '10px' }}>
                         <span>Expédition & Livraison</span>
@@ -1583,7 +1858,7 @@
                       <div style={{ borderTop: '1px dashed rgba(226, 167, 180, 0.4)', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <span style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--purple-dark)' }}>Total à Régler</span>
                         <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--purple-dark)' }}>
-                          {subtotal.toLocaleString('fr-FR')} FCFA
+                          {totalAfterDiscount.toLocaleString('fr-FR')} FCFA
                         </span>
                       </div>
                     </div>
@@ -1657,8 +1932,15 @@
                     </h2>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                      <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
-                        {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
+                      <div>
+                        <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--purple-dark)' }}>
+                          {quickViewProduct.price.toLocaleString('fr-FR')} FCFA
+                        </span>
+                        {quickViewProduct.originalPrice && (
+                          <span style={{ fontSize: '0.9rem', color: '#9B8F9E', textDecoration: 'line-through', marginLeft: '8px' }}>
+                            {quickViewProduct.originalPrice.toLocaleString('fr-FR')} FCFA
+                          </span>
+                        )}
                       </div>
                       <span className={`stock-pill ${quickViewProduct.stock === 0 ? 'no-stock' : quickViewProduct.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
                         {quickViewProduct.stock === 0 ? 'Épuisé' : `${quickViewProduct.stock} en stock`}
