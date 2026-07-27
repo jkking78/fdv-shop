@@ -658,7 +658,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-top: auto;
 }
 
 .product-price {
@@ -667,29 +667,26 @@ body {
   color: var(--purple-dark);
 }
 
-/* DIRECT WHATSAPP BUTTON ON EVERY CARD */
+/* COMPACT SLEEK WHATSAPP BUY ICON BUTTON ON EVERY CARD */
 .btn-whatsapp-card {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px;
+  gap: 6px;
+  padding: 8px 12px;
   border-radius: 14px;
   background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
   color: #FFFFFF;
-  font-size: 0.82rem;
-  font-weight: 700;
   border: none;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
-  margin-top: auto;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.25);
+  flex-shrink: 0;
 }
 
 .btn-whatsapp-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.35);
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
 }
 
 /* 6. CLEAN PERFECTLY CENTERED RESPONSIVE MODAL */

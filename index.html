@@ -978,23 +978,26 @@
                       </a>
                       
                       <div className="product-price-row">
-                        <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
-                        <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
-                          {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
-                        </span>
-                      </div>
+                        <div>
+                          <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
+                          <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`} style={{ marginLeft: '6px' }}>
+                            {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
+                          </span>
+                        </div>
 
-                      {/* DIRECT WHATSAPP ORDER BUTTON ON EVERY ARTICLE CARD */}
-                      <button
-                        className="btn-whatsapp-card"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleOrderOnWhatsApp([{ ...product, quantity: 1 }]);
-                        }}
-                      >
-                        <Icon name="whatsapp" size={16} color="#FFFFFF" />
-                        <span>Commander sur WhatsApp</span>
-                      </button>
+                        {/* COMPACT WHATSAPP BUY ICON BUTTON (WHATSAPP + SHOPPING BAG ICON) */}
+                        <button
+                          className="btn-whatsapp-card"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOrderOnWhatsApp([{ ...product, quantity: 1 }]);
+                          }}
+                          title="Commander immédiatement via WhatsApp"
+                        >
+                          <Icon name="whatsapp" size={18} color="#FFFFFF" />
+                          <Icon name="shopping-bag" size={15} color="#FFFFFF" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 );
@@ -1411,7 +1414,7 @@
                         onClick={() => handleOrderOnWhatsApp([{ ...quickViewProduct, quantity: 1 }])}
                       >
                         <Icon name="whatsapp" size={20} color="#FFFFFF" />
-                        <span>Commander cet article sur WhatsApp (07 78 73 95 27)</span>
+                        <span>Commander cet article sur WhatsApp</span>
                       </button>
 
                       <button
