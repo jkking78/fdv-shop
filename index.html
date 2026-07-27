@@ -134,9 +134,6 @@
       image: (
         <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
       ),
-      sparkles: (
-        <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-6.857 2.286L12 21l-2.286-6.857L3 12l6.857-2.286L12 3z" />
-      ),
       check: (
         <path d="M5 13l4 4L19 7" />
       )
@@ -442,6 +439,8 @@
       const [wishlistIds, setWishlistIds] = useState(['wig-1', 'eventail-1']);
       const [toasts, setToasts] = useState([]);
 
+      const [searchQuery, setSearchQuery] = useState('');
+
       const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
         return sessionStorage.getItem('fdv_admin_auth') === 'true';
       });
@@ -458,8 +457,9 @@
       // APPLE STUDIO MODAL TAB STATE ('info', 'gallery', 'preview')
       const [appleStudioTab, setAppleStudioTab] = useState('info');
 
-      // EDIT PRODUCT STATE
+      // EDIT PRODUCT STATE & PENDING TARGET
       const [editingProduct, setEditingProduct] = useState(null);
+      const [pendingProductToEdit, setPendingProductToEdit] = useState(null);
 
       // NEW / EDIT PRODUCT FORM DATA (MAX 4 IMAGES)
       const [productFormData, setProductFormData] = useState({
@@ -542,16 +542,38 @@
         }));
       };
 
+      const populateEditForm = (product) => {
+        setEditingProduct(product);
+        setProductFormData({
+          id: product.id,
+          title: product.title || '',
+          category: product.category || 'Perruques & Mèches',
+          price: product.price || '',
+          stock: product.stock !== undefined ? product.stock : 5,
+          badge: product.badge || 'Nouveau',
+          installmentText: product.installmentText || 'Disponible en plusieurs couleurs',
+          description: product.description || '',
+          images: (product.images && product.images.length > 0) ? [...product.images] : [product.image]
+        });
+        setAppleStudioTab('info');
+        setIsAdminFormModalOpen(true);
+      };
+
       const handleVerifyAdminAuth = (e) => {
         e.preventDefault();
         if (adminPasswordInput === ADMIN_SECRET) {
           setIsAdminAuthenticated(true);
           sessionStorage.setItem('fdv_admin_auth', 'true');
           setIsAdminAuthModalOpen(false);
-          setIsAdminFormModalOpen(true);
-          setAppleStudioTab('info');
           setAdminPasswordInput('');
           addToast('Connexion Studio Administrateur réussie.', 'info');
+
+          if (pendingProductToEdit) {
+            populateEditForm(pendingProductToEdit);
+            setPendingProductToEdit(null);
+          } else {
+            handleOpenNewProduct();
+          }
         } else {
           addToast('Code d’accès incorrect.', 'error');
           setAdminPasswordInput('');
@@ -563,28 +585,26 @@
         sessionStorage.removeItem('fdv_admin_auth');
         setIsAdminFormModalOpen(false);
         setEditingProduct(null);
+        setPendingProductToEdit(null);
         addToast('Déconnexion effectuée.', 'info');
       };
 
       const handleOpenEditProduct = (product, e) => {
         if (e) e.stopPropagation();
-        setEditingProduct(product);
-        setProductFormData({
-          id: product.id,
-          title: product.title || '',
-          category: product.category || 'Perruques & Mèches',
-          price: product.price || '',
-          stock: product.stock !== undefined ? product.stock : 5,
-          badge: product.badge || 'Nouveau',
-          installmentText: product.installmentText || 'Disponible en plusieurs couleurs',
-          description: product.description || '',
-          images: product.images && product.images.length > 0 ? [...product.images] : [product.image]
-        });
-        setAppleStudioTab('info');
-        setIsAdminFormModalOpen(true);
+        if (isAdminAuthenticated) {
+          populateEditForm(product);
+        } else {
+          setPendingProductToEdit(product);
+          setIsAdminAuthModalOpen(true);
+        }
       };
 
       const handleOpenNewProduct = () => {
+        if (!isAdminAuthenticated) {
+          setPendingProductToEdit(null);
+          setIsAdminAuthModalOpen(true);
+          return;
+        }
         setEditingProduct(null);
         setProductFormData({
           id: null,
@@ -614,7 +634,7 @@
         const cleanDesc = sanitizeText(productFormData.description);
         const cleanBadge = sanitizeText(productFormData.badge);
 
-        const imgList = productFormData.images && productFormData.images.length > 0
+        const imgList = (productFormData.images && productFormData.images.length > 0)
           ? productFormData.images
           : ['/assets/wigs/bodywave-30.jpg'];
 
@@ -704,6 +724,11 @@
         if (activeCategory === 'Nouveautés') return p.isNew;
         return p.category === activeCategory;
       });
+
+      const searchedProducts = productsList.filter(p =>
+        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchQuery.toLowerCase())
+      );
 
       const handleAddToCart = (productToAdd, e) => {
         if (e) e.stopPropagation();
@@ -881,12 +906,10 @@
                 <span className="section-subtitle">BOUTIQUE EN LIGNE ({filteredProducts.length} ARTICLES)</span>
                 <h2 className="section-title">Catalogue {activeCategory}</h2>
               </div>
-              {isAdminAuthenticated && (
-                <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={handleOpenNewProduct}>
-                  <Icon name="plus-circle" size={16} color="#FFFFFF" />
-                  <span>+ Ajouter un Produit</span>
-                </button>
-              )}
+              <button className="btn-primary" style={{ padding: '8px 20px', fontSize: '0.85rem' }} onClick={handleOpenNewProduct}>
+                <Icon name="plus-circle" size={16} color="#FFFFFF" />
+                <span>+ Ajouter un Produit</span>
+              </button>
             </div>
 
             <div className="category-pills">
@@ -915,15 +938,14 @@
                         </span>
                       )}
 
-                      {isAdminAuthenticated && (
-                        <button
-                          className="card-edit-btn"
-                          onClick={(e) => handleOpenEditProduct(product, e)}
-                          title="Modifier les infos de cet article"
-                        >
-                          <Icon name="edit" size={16} color="#FFFFFF" />
-                        </button>
-                      )}
+                      {/* CLIENT EDIT BUTTON (GOLD PENCIL) ALWAYS ACCESSIBLE */}
+                      <button
+                        className="card-edit-btn"
+                        onClick={(e) => handleOpenEditProduct(product, e)}
+                        title="Modifier les infos de cet article"
+                      >
+                        <Icon name="edit" size={16} color="#FFFFFF" />
+                      </button>
 
                       <button
                         className={`card-wishlist-btn ${isWishlisted ? 'active' : ''}`}
@@ -978,7 +1000,7 @@
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
                   <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
-                    Saisissez votre mot de passe administrateur.
+                    Saisissez votre mot de passe administrateur pour modifier ou ajouter des produits.
                   </p>
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -993,7 +1015,7 @@
                       required
                     />
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                      <span>SE CONNECTER</span>
+                      <span>SE CONNECTER & ACCÉDER AU STUDIO</span>
                     </button>
                   </form>
                 </div>
@@ -1182,7 +1204,7 @@
                           ))}
                         </div>
                       ) : (
-                        <div style={{ textStyle: 'italic', color: '#9B8F9E', textAlign: 'center', padding: '30px' }}>
+                        <div style={{ fontStyle: 'italic', color: '#9B8F9E', textAlign: 'center', padding: '30px' }}>
                           Aucune photo sélectionnée pour cet article.
                         </div>
                       )}
@@ -1193,7 +1215,7 @@
                   {appleStudioTab === 'preview' && (
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                       <div style={{ width: '100%', maxWidth: '320px' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#27AE60', display: 'block', textAlignment: 'center', marginBottom: '12px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#27AE60', display: 'block', textAlign: 'center', marginBottom: '12px' }}>
                           ✓ Aperçu Fiche Studio en Temps Réel :
                         </span>
 
