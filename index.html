@@ -586,11 +586,13 @@
           sessionStorage.setItem('fdv_admin_auth', 'true');
           setIsAdminAuthModalOpen(false);
           setAdminPasswordInput('');
-          addToast('Mode Propriétaire activé ! Les boutons d’édition sont visibles.', 'info');
+          addToast('Mode Propriétaire activé ! Les crayons dorés et le bouton d’ajout sont visibles.', 'info');
 
           if (pendingProductToEdit) {
             populateEditForm(pendingProductToEdit);
             setPendingProductToEdit(null);
+          } else {
+            handleOpenNewProduct();
           }
         } else {
           addToast('Code d’accès incorrect.', 'error');
@@ -813,6 +815,30 @@
 
       return (
         <div className="app-layout">
+          {/* FLOATING ADMIN BAR WHEN AUTHENTICATED */}
+          {isAdminAuthenticated && (
+            <div className="admin-floating-bar">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#27AE60', display: 'inline-block' }}></span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#FFFFFF' }}>Mode Propriétaire Connecté</span>
+              </div>
+              <button
+                className="btn-primary"
+                style={{ padding: '6px 14px', fontSize: '0.78rem', borderRadius: '16px' }}
+                onClick={handleOpenNewProduct}
+              >
+                <Icon name="plus-circle" size={14} color="#FFFFFF" />
+                <span>+ Ajouter un Article</span>
+              </button>
+              <button
+                onClick={handleAdminLogout}
+                style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '6px 12px', borderRadius: '14px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Déconnexion
+              </button>
+            </div>
+          )}
+
           {/* 1. TOP ANNOUNCEMENT BAR */}
           <div className="announcement-bar">
             <div className="announcement-content">
@@ -863,7 +889,7 @@
                     style={{ fontSize: '0.72rem', color: '#27AE60', background: '#E8F8F5', border: '1px solid rgba(39, 174, 96, 0.3)', padding: '6px 12px', borderRadius: '20px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                     title="Cliquer pour vous déconnecter du mode Propriétaire"
                   >
-                    <span>🔒 Connecté Admin</span>
+                    <span>🔒 Admin Connecté</span>
                   </button>
                 )}
                 <button className="icon-btn" onClick={() => setIsSearchOpen(true)} title="Rechercher">
@@ -965,14 +991,14 @@
                         </span>
                       )}
 
-                      {/* EDIT BUTTON (GOLD PENCIL) ONLY VISIBLE WHEN PROPRIETAIRE HAS AUTHENTICATED */}
+                      {/* EDIT BUTTON (GOLD PENCIL 🖊️) ONLY VISIBLE WHEN PROPRIETAIRE HAS AUTHENTICATED */}
                       {isAdminAuthenticated && (
                         <button
                           className="card-edit-btn"
                           onClick={(e) => handleOpenEditProduct(product, e)}
                           title="Modifier les infos de cet article"
                         >
-                          <Icon name="edit" size={15} color="#FFFFFF" />
+                          <Icon name="edit" size={16} color="#FFFFFF" />
                         </button>
                       )}
 
@@ -1081,7 +1107,7 @@
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
                   <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
-                    Saisissez votre mot de passe administrateur pour afficher les boutons d'édition et d'ajout d'articles.
+                    Saisissez votre mot de passe administrateur pour déverrouiller la gestion de votre boutique.
                   </p>
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -1096,7 +1122,7 @@
                       required
                     />
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                      <span>SE CONNECTER & AFFICHER L’ÉDITEUR</span>
+                      <span>SE CONNECTER & OUVRIR L’ÉDITEUR</span>
                     </button>
                   </form>
                 </div>
