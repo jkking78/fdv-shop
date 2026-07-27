@@ -50,7 +50,7 @@
     const ADMIN_SECRET = 'FDV2026!Admin';
     const WHATSAPP_PHONE = '2250778739527';
 
-    // DEFAULT PROMO CODES
+    // DEFAULT PROMO CODES (PRIVATE / UNLISTED PUBLICLY)
     const DEFAULT_PROMO_CODES = [
       { id: 'promo-1', code: 'FDV10', discountType: 'percent', value: 10, isActive: true, description: '10% de réduction sur tout le site' },
       { id: 'promo-2', code: 'ELEGANCE15', discountType: 'percent', value: 15, isActive: true, description: '15% de réduction spéciale' },
@@ -439,7 +439,7 @@
 
       const [activeCategory, setActiveCategory] = useState('Perruques & Mèches');
 
-      // PROMO CODES MANAGEMENT STATE (SAVED IN LOCAL STORAGE & PRE-FILLED WITH DEFAULTS)
+      // PROMO CODES MANAGEMENT STATE (SAVED IN LOCAL STORAGE & CONFIDENTIAL / UNLISTED PUBLICLY)
       const [promoCodesList, setPromoCodesList] = useState(() => {
         const saved = localStorage.getItem('fdv_promo_codes');
         if (saved) {
@@ -1010,10 +1010,10 @@
             </div>
           )}
 
-          {/* 1. TOP ANNOUNCEMENT BAR */}
+          {/* 1. TOP ANNOUNCEMENT BAR (CLEAN, NO PUBLIC CODES EXPOSED) */}
           <div className="announcement-bar">
             <div className="announcement-content">
-              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) • Code Promo : FDV10 (-10%) • WhatsApp: 07 78 73 95 27</span>
+              <span>Collection Perruques Human Hair • Éventails Pagne Wax (1 700 FCFA) • Commandes WhatsApp: 07 78 73 95 27</span>
             </div>
           </div>
 
@@ -1541,19 +1541,23 @@
                     </div>
                   </div>
 
-                  {/* CARD 5: DEDICATED PROMO CODES MANAGEMENT (ADMIN CREATION & DELETION) */}
+                  {/* CARD 5: CONFIDENTIAL PROMO CODES MANAGEMENT (PRIVATE CREATION & DELETION) */}
                   <div className="admin-editor-section-card" style={{ background: '#FAF6FA', border: '1px solid rgba(212, 175, 55, 0.4)' }}>
                     <div className="admin-section-header">
-                      <span style={{ fontSize: '1.1rem' }}>🎟️</span>
+                      <span style={{ fontSize: '1.1rem' }}>🔒</span>
                       <span className="admin-section-title" style={{ color: 'var(--purple-dark)' }}>
-                        5. Gestion des Codes Promos & Réductions Périodiques
+                        5. Gestion Confidentielle des Codes Promos & Réductions Périodiques
                       </span>
                     </div>
+
+                    <p style={{ fontSize: '0.78rem', color: '#6C5B70', lineHeight: '1.35', marginBottom: '8px' }}>
+                      Ces codes sont secrets et confidentiels. Transmettez-les directement à vos clients privilégiés par WhatsApp ou message privé.
+                    </p>
 
                     {/* CREATE NEW PROMO CODE FORM */}
                     <div style={{ background: '#FFFFFF', padding: '14px', borderRadius: '14px', border: '1px solid rgba(226, 167, 180, 0.3)' }}>
                       <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--purple-dark)', display: 'block', marginBottom: '10px' }}>
-                        + Créer un nouveau Code Promo
+                        + Créer un nouveau Code Promo Secret
                       </span>
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '8px' }}>
                         <input
@@ -1586,21 +1590,21 @@
                         style={{ width: '100%', justifyContent: 'center', padding: '8px', borderRadius: '12px', fontSize: '0.8rem' }}
                       >
                         <Icon name="tag" size={14} color="#FFFFFF" />
-                        <span>Créer & Activer le Code Promo</span>
+                        <span>Créer & Activer le Code Promo Secret</span>
                       </button>
                     </div>
 
                     {/* ACTIVE PROMO CODES LIST */}
                     <div>
                       <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#6C5B70', display: 'block', marginBottom: '8px' }}>
-                        Codes Promos Actuellement Actifs ({promoCodesList.length}) :
+                        Codes Promos Privés Actifs ({promoCodesList.length}) :
                       </span>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         {promoCodesList.map(promo => (
                           <div key={promo.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FFFFFF', padding: '8px 12px', borderRadius: '12px', border: '1px solid rgba(226, 167, 180, 0.3)' }}>
                             <div>
                               <span style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--purple-dark)', letterSpacing: '0.5px' }}>
-                                🎟️ {promo.code}
+                                🔒 {promo.code}
                               </span>
                               <span style={{ fontSize: '0.75rem', color: '#27AE60', fontWeight: 700, marginLeft: '8px' }}>
                                 ({promo.discountType === 'percent' ? `-${promo.value}%` : `-${promo.value.toLocaleString('fr-FR')} FCFA`})
@@ -1818,7 +1822,7 @@
                         <form onSubmit={handleApplyPromoCode} style={{ display: 'flex', gap: '6px' }}>
                           <input
                             type="text"
-                            placeholder="ex: FDV10"
+                            placeholder="Saisir votre code secret"
                             value={promoInputCode}
                             onChange={(e) => setPromoInputCode(e.target.value)}
                             style={{ flex: 1, padding: '8px 12px', borderRadius: '12px', border: '1px solid rgba(226, 167, 180, 0.4)', fontSize: '0.85rem', textTransform: 'uppercase', outline: 'none' }}
