@@ -886,10 +886,11 @@
                 {isAdminAuthenticated && (
                   <button
                     onClick={handleAdminLogout}
-                    style={{ fontSize: '0.72rem', color: '#27AE60', background: '#E8F8F5', border: '1px solid rgba(39, 174, 96, 0.3)', padding: '6px 12px', borderRadius: '20px', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                    title="Cliquer pour vous déconnecter du mode Propriétaire"
+                    className="admin-header-pill"
+                    title="Cliquer pour se déconnecter du mode Propriétaire"
                   >
-                    <span>🔒 Admin Connecté</span>
+                    <span className="admin-status-dot"></span>
+                    <span>Admin</span>
                   </button>
                 )}
                 <button className="icon-btn" onClick={() => setIsSearchOpen(true)} title="Rechercher">
