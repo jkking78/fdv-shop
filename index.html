@@ -1014,20 +1014,8 @@
                         </span>
                       )}
 
-                      {/* EDIT BUTTON (GOLD PENCIL 🖊️) ONLY VISIBLE WHEN PROPRIETAIRE HAS AUTHENTICATED */}
-                      {isAdminAuthenticated && (
-                        <button
-                          className="card-edit-btn"
-                          onClick={(e) => handleOpenEditProduct(product, e)}
-                          title="Modifier les infos de cet article"
-                        >
-                          <Icon name="edit" size={16} color="#FFFFFF" />
-                        </button>
-                      )}
-
                       <button
                         className={`card-wishlist-btn ${isWishlisted ? 'active' : ''}`}
-                        style={{ right: isAdminAuthenticated ? '56px' : '14px' }}
                         onClick={(e) => handleToggleWishlist(product, e)}
                         title="Favoris"
                       >
@@ -1053,12 +1041,24 @@
                         {product.title}
                       </a>
                       
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
                         <span className="product-price">{product.price.toLocaleString('fr-FR')} FCFA</span>
                         <span className={`stock-pill ${isOutOfStock ? 'no-stock' : product.stock <= 3 ? 'low-stock' : 'in-stock'}`}>
                           {isOutOfStock ? 'Épuisé' : `${product.stock} en stock`}
                         </span>
                       </div>
+
+                      {/* SLEEK DEDICATED ADMIN EDIT BUTTON (ZERO OVERLAP WITH BADGES/HEART!) */}
+                      {isAdminAuthenticated && (
+                        <button
+                          className="card-admin-edit-pill"
+                          onClick={(e) => handleOpenEditProduct(product, e)}
+                          title="Modifier cet article"
+                        >
+                          <Icon name="edit" size={13} color="#FFFFFF" />
+                          <span>Modifier l'article</span>
+                        </button>
+                      )}
 
                       {/* STOCK-SYNCED QUANTITY SELECTOR & COMPACT BUY BUTTONS */}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', gap: '6px' }}>

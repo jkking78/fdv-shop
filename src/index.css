@@ -533,15 +533,19 @@ body {
 
 .card-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
+  top: 10px;
+  left: 10px;
   background: var(--purple-dark);
   color: #FFFFFF;
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 5px 14px;
+  padding: 5px 12px;
   border-radius: 14px;
   z-index: 2;
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-badge.new {
@@ -581,8 +585,8 @@ body {
 
 .card-wishlist-btn {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 10px;
+  right: 10px;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -597,27 +601,30 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.card-edit-btn {
-  position: absolute;
-  top: 14px;
-  right: 56px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+/* SLEEK ADMIN EDIT BAR INSIDE CARD INFO (ZERO OVERLAP!) */
+.card-admin-edit-pill {
+  width: 100%;
   background: linear-gradient(135deg, #D4AF37 0%, #AA881E 100%);
   color: #FFFFFF;
-  border: 2px solid #FFFFFF;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  transition: transform 0.2s ease;
+  gap: 6px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+  transition: all 0.2s ease;
 }
 
-.card-edit-btn:hover {
-  transform: scale(1.12);
+.card-admin-edit-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.45);
 }
 
 .card-quick-actions {
