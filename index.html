@@ -425,15 +425,33 @@
       });
 
       const [activeCategory, setActiveCategory] = useState('Perruques & Mèches');
-      const [cart, setCart] = useState([
-        {
-          ...INITIAL_WIGS[0],
-          selectedSize: 'Taille 30',
-          selectedColor: 'Plusieurs couleurs disponibles',
-          quantity: 1
+
+      // INITIALIZE CART AND WISHLIST EMPTY FOR NEW VISITORS
+      const [cart, setCart] = useState(() => {
+        const saved = localStorage.getItem('fdv_cart');
+        if (saved) {
+          try { return JSON.parse(saved); } catch(e) {}
         }
-      ]);
-      const [wishlistIds, setWishlistIds] = useState(['wig-1', 'eventail-1']);
+        return [];
+      });
+
+      const [wishlistIds, setWishlistIds] = useState(() => {
+        const saved = localStorage.getItem('fdv_wishlist');
+        if (saved) {
+          try { return JSON.parse(saved); } catch(e) {}
+        }
+        return [];
+      });
+
+      // AUTO PERSIST CART AND WISHLIST TO LOCAL STORAGE
+      useEffect(() => {
+        localStorage.setItem('fdv_cart', JSON.stringify(cart));
+      }, [cart]);
+
+      useEffect(() => {
+        localStorage.setItem('fdv_wishlist', JSON.stringify(wishlistIds));
+      }, [wishlistIds]);
+
       const [toasts, setToasts] = useState([]);
 
       // ITEM QUANTITY SELECTION STATE (SYNCED WITH STOCK)
