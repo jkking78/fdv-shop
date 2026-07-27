@@ -451,11 +451,12 @@
 
       const [searchQuery, setSearchQuery] = useState('');
 
-      // STRICT ADMIN AUTHENTICATION STATE
+      // STRICT ADMIN AUTHENTICATION STATE & IN-MODAL ERROR MESSAGE
       const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(() => {
         return sessionStorage.getItem('fdv_admin_auth') === 'true';
       });
       const [adminPasswordInput, setAdminPasswordInput] = useState('');
+      const [authError, setAuthError] = useState('');
       const [isAdminAuthModalOpen, setIsAdminAuthModalOpen] = useState(false);
       const [isAdminFormModalOpen, setIsAdminFormModalOpen] = useState(false);
 
@@ -581,20 +582,36 @@
 
       const handleVerifyAdminAuth = (e) => {
         e.preventDefault();
-        if (adminPasswordInput === ADMIN_SECRET) {
+        setAuthError('');
+
+        const inputClean = String(adminPasswordInput || '').trim();
+        if (inputClean === ADMIN_SECRET) {
           setIsAdminAuthenticated(true);
           sessionStorage.setItem('fdv_admin_auth', 'true');
           setIsAdminAuthModalOpen(false);
           setAdminPasswordInput('');
-          addToast('Mode Propriétaire activé ! Les crayons dorés et le bouton d’ajout sont visibles.', 'info');
+          addToast('Connexion Propriétaire réussie !', 'info');
 
           if (pendingProductToEdit) {
             populateEditForm(pendingProductToEdit);
             setPendingProductToEdit(null);
           } else {
-            handleOpenNewProduct();
+            setEditingProduct(null);
+            setProductFormData({
+              id: null,
+              title: '',
+              category: 'Perruques & Mèches',
+              price: '',
+              stock: 5,
+              badge: 'Nouveau',
+              installmentText: 'Disponible en plusieurs couleurs',
+              description: '',
+              images: []
+            });
+            setIsAdminFormModalOpen(true);
           }
         } else {
+          setAuthError('Mot de passe incorrect. Veuillez réessayer.');
           addToast('Code d’accès incorrect.', 'error');
           setAdminPasswordInput('');
         }
@@ -606,6 +623,7 @@
         setIsAdminFormModalOpen(false);
         setEditingProduct(null);
         setPendingProductToEdit(null);
+        setAuthError('');
         addToast('Mode Propriétaire désactivé.', 'info');
       };
 
@@ -615,6 +633,7 @@
           populateEditForm(product);
         } else {
           setPendingProductToEdit(product);
+          setAuthError('');
           setIsAdminAuthModalOpen(true);
         }
       };
@@ -622,6 +641,7 @@
       const handleOpenNewProduct = () => {
         if (!isAdminAuthenticated) {
           setPendingProductToEdit(null);
+          setAuthError('');
           setIsAdminAuthModalOpen(true);
           return;
         }
@@ -1095,11 +1115,11 @@
             </div>
           </section>
 
-          {/* 5. ADMIN AUTH MODAL */}
+          {/* 5. ADMIN AUTH MODAL WITH IN-MODAL FEEDBACK */}
           {isAdminAuthModalOpen && (
-            <div className="modal-overlay" onClick={() => setIsAdminAuthModalOpen(false)}>
+            <div className="modal-overlay" onClick={() => { setIsAdminAuthModalOpen(false); setAuthError(''); }}>
               <div className="modal-content" style={{ maxWidth: '420px' }} onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={() => setIsAdminAuthModalOpen(false)}>
+                <button className="modal-close-btn" onClick={() => { setIsAdminAuthModalOpen(false); setAuthError(''); }}>
                   <Icon name="x" size={20} color="#2A172E" />
                 </button>
                 <div style={{ padding: '28px', textAlign: 'center' }}>
@@ -1107,18 +1127,24 @@
                     <Icon name="lock" size={26} color="#2A172E" />
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '16px' }}>
                     Saisissez votre mot de passe administrateur pour déverrouiller la gestion de votre boutique.
                   </p>
+
+                  {authError && (
+                    <div style={{ background: '#FADBD8', color: '#E74C3C', border: '1px solid #F5B7B1', padding: '10px 14px', borderRadius: '12px', fontSize: '0.82rem', fontWeight: 700, marginBottom: '16px', textAlign: 'center' }}>
+                      {authError}
+                    </div>
+                  )}
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <input
                       type="password"
                       placeholder="Mot de passe"
                       value={adminPasswordInput}
-                      onChange={(e) => setAdminPasswordInput(e.target.value)}
+                      onChange={(e) => { setAdminPasswordInput(e.target.value); setAuthError(''); }}
                       className="form-input"
-                      style={{ textAlign: 'center', fontSize: '1rem' }}
+                      style={{ textAlign: 'center', fontSize: '1rem', borderColor: authError ? '#E74C3C' : '' }}
                       autoFocus
                       required
                     />
@@ -1365,7 +1391,7 @@
                         </button>
                       </div>
                     ) : (
-                      <button onClick={() => setIsAdminAuthModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
+                      <button onClick={() => { setIsAdminAuthModalOpen(true); setAuthError(''); }} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
                         🔒 Accès Propriétaire Administrateur
                       </button>
                     )}
