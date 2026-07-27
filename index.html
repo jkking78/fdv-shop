@@ -468,6 +468,19 @@
         images: []
       });
 
+      // AUTO-OPEN DEEP-LINKED PRODUCT MODAL FROM URL (e.g. ?product=wig-1)
+      useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const urlProdId = params.get('product');
+        if (urlProdId) {
+          const matched = productsList.find(p => p.id === urlProdId);
+          if (matched) {
+            setQuickViewProduct(matched);
+            setActiveModalImageIdx(0);
+          }
+        }
+      }, []);
+
       useEffect(() => {
         if (db && isFirebaseActive) {
           const unsubscribe = db.collection('products').onSnapshot(snapshot => {
@@ -691,12 +704,19 @@
         setIsAdminFormModalOpen(false);
       };
 
-      // WHATSAPP REDIRECTION SYSTEM
+      // WHATSAPP REDIRECTION SYSTEM WITH DYNAMIC ITEM DIRECT LINKS
       const handleOrderOnWhatsApp = (cartItems, clientInfo = {}) => {
+        const baseUrl = window.location.origin + window.location.pathname;
         let msg = `Bonjour FDV shopping ! Je souhaite commander les articles suivants :\n\n`;
+        
         cartItems.forEach((item, idx) => {
-          msg += `${idx + 1}. *${item.title}*\n   - Quantité: ${item.quantity}\n   - Prix: ${(item.price * item.quantity).toLocaleString('fr-FR')} FCFA\n\n`;
+          const itemUrl = `${baseUrl}?product=${item.id}`;
+          msg += `${idx + 1}. *${item.title}*\n`;
+          msg += `   🔗 Lien: ${itemUrl}\n`;
+          msg += `   - Quantité: ${item.quantity}\n`;
+          msg += `   - Prix: ${(item.price * item.quantity).toLocaleString('fr-FR')} FCFA\n\n`;
         });
+        
         const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0);
         msg += `💰 *TOTAL À REGLER : ${total.toLocaleString('fr-FR')} FCFA*\n\n`;
 
@@ -991,7 +1011,7 @@
                   </div>
                   <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E', marginBottom: '6px' }}>Accès Propriétaire</h3>
                   <p style={{ fontSize: '0.85rem', color: '#6C5B70', marginBottom: '20px' }}>
-                    Saisissez votre mot de passe administrateur.
+                    Saisissez votre mot de passe administrateur pour modifier ou ajouter des produits.
                   </p>
 
                   <form onSubmit={handleVerifyAdminAuth} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -1006,7 +1026,7 @@
                       required
                     />
                     <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                      <span>ACCÉDER À L’ÉDITEUR</span>
+                      <span>SE CONNECTER & ACCÉDER À L’ÉDITEUR</span>
                     </button>
                   </form>
                 </div>
