@@ -23,7 +23,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- React & ReactDOM CDN -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -130,6 +130,12 @@
       ),
       whatsapp: (
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.43-9.874 9.877-9.874 2.637 0 5.116 1.028 6.98 2.893A9.8 9.8 0 0121.854 12c0 5.447-4.429 9.877-9.874 9.877m0-18.177C6.07 3.608 1.48 8.198 1.48 13.8a10.14 10.14 0 001.55 5.42L0 24l4.908-1.288a10.17 10.17 0 005.289 1.474c5.727 0 10.387-4.66 10.387-10.386 0-2.772-1.08-5.378-3.04-7.338A10.3 10.3 0 0012.051 3.608" />
+      ),
+      image: (
+        <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      ),
+      sparkles: (
+        <path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-6.857 2.286L12 21l-2.286-6.857L3 12l6.857-2.286L12 3z" />
       ),
       check: (
         <path d="M5 13l4 4L19 7" />
@@ -446,9 +452,11 @@
       const [isCartOpen, setIsCartOpen] = useState(false);
       const [isWishlistOpen, setIsWishlistOpen] = useState(false);
       const [isSearchOpen, setIsSearchOpen] = useState(false);
-      const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
       const [quickViewProduct, setQuickViewProduct] = useState(null);
       const [activeModalImageIdx, setActiveModalImageIdx] = useState(0);
+
+      // APPLE STUDIO MODAL TAB STATE ('info', 'gallery', 'preview')
+      const [appleStudioTab, setAppleStudioTab] = useState('info');
 
       // EDIT PRODUCT STATE
       const [editingProduct, setEditingProduct] = useState(null);
@@ -541,8 +549,9 @@
           sessionStorage.setItem('fdv_admin_auth', 'true');
           setIsAdminAuthModalOpen(false);
           setIsAdminFormModalOpen(true);
+          setAppleStudioTab('info');
           setAdminPasswordInput('');
-          addToast('Connexion administrateur réussie.', 'info');
+          addToast('Connexion Studio Administrateur réussie.', 'info');
         } else {
           addToast('Code d’accès incorrect.', 'error');
           setAdminPasswordInput('');
@@ -571,6 +580,7 @@
           description: product.description || '',
           images: product.images && product.images.length > 0 ? [...product.images] : [product.image]
         });
+        setAppleStudioTab('info');
         setIsAdminFormModalOpen(true);
       };
 
@@ -587,13 +597,18 @@
           description: '',
           images: []
         });
+        setAppleStudioTab('info');
         setIsAdminFormModalOpen(true);
       };
 
       const handleSaveProduct = (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         if (!isAdminAuthenticated) return;
-        if (!productFormData.title || !productFormData.price) return;
+        if (!productFormData.title || !productFormData.price) {
+          addToast('Veuillez spécifier au moins un titre et un prix.', 'error');
+          setAppleStudioTab('info');
+          return;
+        }
 
         const cleanTitle = sanitizeText(productFormData.title);
         const cleanDesc = sanitizeText(productFormData.description);
@@ -894,14 +909,12 @@
                 return (
                   <div key={product.id} className="product-card">
                     <div className="product-image-box">
-                      {/* EDITABLE INDICATIF BADGE AT TOP LEFT */}
                       {product.badge && (
                         <span className={`card-badge ${isOutOfStock ? 'out-of-stock' : product.badge === 'Nouveau' ? 'new' : product.badge === 'Top Vente' ? 'bestseller' : ''}`}>
                           {isOutOfStock ? 'Rupture de stock' : product.badge}
                         </span>
                       )}
 
-                      {/* CLIENT EDIT BUTTON (GOLD PENCIL) AT TOP RIGHT WHEN LOGGED IN */}
                       {isAdminAuthenticated && (
                         <button
                           className="card-edit-btn"
@@ -988,59 +1001,77 @@
             </div>
           )}
 
-          {/* 6. ADMIN PRODUCT FORM MODAL (ADD & EDIT WITH UP TO 4 IMAGES & STOCK & BADGE) */}
+          {/*  6. APPLE STUDIO PRODUCT MANAGEMENT MODAL (PRODUCT STUDIO UX) */}
           {isAdminFormModalOpen && isAdminAuthenticated && (
             <div className="modal-overlay" onClick={() => setIsAdminFormModalOpen(false)}>
-              <div className="modal-content" style={{ maxWidth: '580px' }} onClick={(e) => e.stopPropagation()}>
-                <button className="modal-close-btn" onClick={() => setIsAdminFormModalOpen(false)}>
-                  <Icon name="x" size={20} color="#2A172E" />
-                </button>
-                <div style={{ padding: '32px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <div>
-                      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.6rem', color: '#2A172E' }}>
-                        {editingProduct ? 'Modifier l’Article' : 'Ajouter un Produit'}
-                      </h3>
-                      <p style={{ fontSize: '0.8rem', color: '#27AE60', fontWeight: 600 }}>Session Propriétaire Active</p>
-                    </div>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      {editingProduct && (
-                        <button onClick={() => handleDeleteProduct(editingProduct.id)} style={{ fontSize: '0.75rem', color: '#FFF', background: '#E74C3C', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer', fontWeight: 600 }}>
-                          Supprimer
-                        </button>
-                      )}
-                      <button onClick={handleAdminLogout} style={{ fontSize: '0.75rem', color: '#E74C3C', fontWeight: 600, background: '#FADBD8', border: 'none', padding: '6px 12px', borderRadius: '12px', cursor: 'pointer' }}>
-                        Déconnexion
-                      </button>
-                    </div>
+              <div className="apple-studio-modal" onClick={(e) => e.stopPropagation()}>
+                
+                {/* APPLE STUDIO SEGMENTED CONTROL HEADER */}
+                <div className="apple-studio-header">
+                  <div>
+                    <span style={{ fontSize: '0.72rem', letterSpacing: '1.5px', fontWeight: 800, color: 'var(--purple-accent)', textTransform: 'uppercase' }}>
+                      APPLE PRODUCT STUDIO 
+                    </span>
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', color: 'var(--purple-dark)' }}>
+                      {editingProduct ? 'Modifier l’Article' : 'Nouveau Produit'}
+                    </h3>
                   </div>
 
-                  <form onSubmit={handleSaveProduct} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                        Titre / Nom de l'Article *
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="ex: Perruque Body Wave Taille 30"
-                        value={productFormData.title}
-                        onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
-                        className="newsletter-input"
-                        style={{ width: '100%' }}
-                        required
-                      />
-                    </div>
+                  <div className="apple-segmented-control">
+                    <button
+                      className={`apple-segment-btn ${appleStudioTab === 'info' ? 'active' : ''}`}
+                      onClick={() => setAppleStudioTab('info')}
+                    >
+                      <Icon name="edit" size={15} />
+                      <span>Infos Produit</span>
+                    </button>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                      <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                          Catégorie *
-                        </label>
+                    <button
+                      className={`apple-segment-btn ${appleStudioTab === 'gallery' ? 'active' : ''}`}
+                      onClick={() => setAppleStudioTab('gallery')}
+                    >
+                      <Icon name="image" size={15} />
+                      <span>Photos ({productFormData.images.length}/4)</span>
+                    </button>
+
+                    <button
+                      className={`apple-segment-btn ${appleStudioTab === 'preview' ? 'active' : ''}`}
+                      onClick={() => setAppleStudioTab('preview')}
+                    >
+                      <Icon name="eye" size={15} />
+                      <span>Aperçu Studio</span>
+                    </button>
+                  </div>
+
+                  <button className="modal-close-btn" style={{ position: 'static' }} onClick={() => setIsAdminFormModalOpen(false)}>
+                    <Icon name="x" size={18} color="#2A172E" />
+                  </button>
+                </div>
+
+                {/* APPLE STUDIO BODY CONTENT */}
+                <div className="apple-studio-body">
+
+                  {/* TAB 1: PRODUCT INFO */}
+                  {appleStudioTab === 'info' && (
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                      <div className="apple-input-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="apple-label">Titre / Nom du Produit *</label>
+                        <input
+                          type="text"
+                          className="apple-input"
+                          placeholder="ex: Perruque Body Wave Taille 30"
+                          value={productFormData.title}
+                          onChange={(e) => setProductFormData({ ...productFormData, title: e.target.value })}
+                          required
+                        />
+                      </div>
+
+                      <div className="apple-input-group">
+                        <label className="apple-label">Catégorie *</label>
                         <select
+                          className="apple-input"
                           value={productFormData.category}
                           onChange={(e) => setProductFormData({ ...productFormData, category: e.target.value })}
-                          className="newsletter-input"
-                          style={{ width: '100%', padding: '12px' }}
                         >
                           <option value="Perruques & Mèches">Perruques & Mèches</option>
                           <option value="Éventails en Pagne">Éventails en Pagne</option>
@@ -1049,65 +1080,81 @@
                         </select>
                       </div>
 
-                      <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                          Prix (en FCFA) *
-                        </label>
+                      <div className="apple-input-group">
+                        <label className="apple-label">Prix (FCFA) *</label>
                         <input
                           type="number"
+                          className="apple-input"
                           placeholder="ex: 65000"
                           value={productFormData.price}
                           onChange={(e) => setProductFormData({ ...productFormData, price: e.target.value })}
-                          className="newsletter-input"
-                          style={{ width: '100%' }}
                           required
                         />
                       </div>
-                    </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                      <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                          Nombre de Stock Disponible *
-                        </label>
+                      <div className="apple-input-group">
+                        <label className="apple-label">Nombre en Stock Disponible *</label>
                         <input
                           type="number"
                           min="0"
+                          className="apple-input"
                           placeholder="ex: 10"
                           value={productFormData.stock}
                           onChange={(e) => setProductFormData({ ...productFormData, stock: e.target.value })}
-                          className="newsletter-input"
-                          style={{ width: '100%' }}
                           required
                         />
                       </div>
 
-                      <div>
-                        <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                          Indicatif en Haut à Gauche (Badge)
-                        </label>
+                      <div className="apple-input-group">
+                        <label className="apple-label">Badge Indicatif Image (Haut à Gauche)</label>
                         <input
                           type="text"
+                          className="apple-input"
                           placeholder="ex: Top Vente, Nouveau, -20%, Luxe VIP"
                           value={productFormData.badge}
                           onChange={(e) => setProductFormData({ ...productFormData, badge: e.target.value })}
-                          className="newsletter-input"
-                          style={{ width: '100%' }}
+                        />
+                      </div>
+
+                      <div className="apple-input-group" style={{ gridColumn: 'span 2' }}>
+                        <label className="apple-label">Description du Produit</label>
+                        <textarea
+                          className="apple-input"
+                          rows="3"
+                          placeholder="Description soignée du produit..."
+                          value={productFormData.description}
+                          onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
+                          style={{ resize: 'none' }}
                         />
                       </div>
                     </div>
+                  )}
 
+                  {/* TAB 2: MULTI-PHOTO GALLERY (MAX 4 IMAGES) */}
+                  {appleStudioTab === 'gallery' && (
                     <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '6px' }}>
-                        Photos de l'Article (Maximum 4 Photos) *
-                      </label>
-                      
+                      <div style={{ marginBottom: '16px' }}>
+                        <h4 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.2rem', color: 'var(--purple-dark)' }}>
+                          Galerie Photos ({productFormData.images.length}/4 Photos)
+                        </h4>
+                        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                          Ajoutez jusqu'à 4 photos HD pour permettre à vos clientes d'observer chaque angle sous son meilleur jour.
+                        </p>
+                      </div>
+
                       {productFormData.images.length < 4 && (
-                        <label className="file-upload-zone">
-                          <Icon name="upload-cloud" size={26} color="#5C3260" />
-                          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#5C3260' }}>
-                            📷 Sélectionner des Photos (Max 4 photos)
-                          </span>
+                        <label className="apple-dropzone" style={{ marginBottom: '24px' }}>
+                          <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-sm)' }}>
+                            <Icon name="upload-cloud" size={24} color="#5C3260" />
+                          </div>
+                          <div>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--purple-dark)', display: 'block' }}>
+                              Déposer des photos ou Cliquer pour Sélectionner
+                            </span>
+                            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                              Formats supportés : JPG, PNG, WEBP (Max 4 photos)
+                            </span>
+                          </div>
                           <input
                             type="file"
                             accept="image/*"
@@ -1118,47 +1165,104 @@
                         </label>
                       )}
 
-                      {productFormData.images.length > 0 && (
-                        <div style={{ marginTop: '12px' }}>
-                          <span style={{ fontSize: '0.78rem', color: '#27AE60', fontWeight: 700, display: 'block', marginBottom: '8px' }}>
-                            ✓ Photos sélectionnées ({productFormData.images.length}/4) :
-                          </span>
-                          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                            {productFormData.images.map((imgSrc, idx) => (
-                              <div key={idx} style={{ position: 'relative', width: '80px', height: '90px' }}>
-                                <img src={imgSrc} alt={`Photo ${idx+1}`} style={{ width: '100%', height: '100%', borderRadius: '10px', objectFit: 'cover' }} />
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveFormImage(idx)}
-                                  style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#E74C3C', color: '#FFF', border: 'none', borderRadius: '50%', width: '22px', height: '22px', cursor: 'pointer', fontSize: '0.7rem' }}
-                                >
-                                  ✕
-                                </button>
-                              </div>
-                            ))}
-                          </div>
+                      {productFormData.images.length > 0 ? (
+                        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                          {productFormData.images.map((imgSrc, idx) => (
+                            <div key={idx} className="apple-thumb-card">
+                              <img src={imgSrc} alt={`Photo ${idx+1}`} />
+                              {idx === 0 && <span className="apple-thumb-primary-badge">★ Principale</span>}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveFormImage(idx)}
+                                style={{ position: 'absolute', top: '6px', right: '6px', background: 'rgba(231, 76, 60, 0.9)', color: '#FFF', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div style={{ textStyle: 'italic', color: '#9B8F9E', textAlign: 'center', padding: '30px' }}>
+                          Aucune photo sélectionnée pour cet article.
                         </div>
                       )}
                     </div>
+                  )}
 
-                    <div>
-                      <label style={{ fontSize: '0.82rem', fontWeight: 600, color: '#2A172E', display: 'block', marginBottom: '4px' }}>
-                        Description
-                      </label>
-                      <textarea
-                        placeholder="Description complète du produit..."
-                        value={productFormData.description}
-                        onChange={(e) => setProductFormData({ ...productFormData, description: e.target.value })}
-                        className="newsletter-input"
-                        style={{ width: '100%', height: '70px', borderRadius: '14px', resize: 'none' }}
-                      />
+                  {/* TAB 3: APPLE REAL-TIME STUDIO PREVIEW */}
+                  {appleStudioTab === 'preview' && (
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                      <div style={{ width: '100%', maxWidth: '320px' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#27AE60', display: 'block', textAlignment: 'center', marginBottom: '12px' }}>
+                          ✓ Aperçu Fiche Studio en Temps Réel :
+                        </span>
+
+                        <div className="product-card">
+                          <div className="product-image-box">
+                            <span className="card-badge new">
+                              {productFormData.badge || 'Nouveau'}
+                            </span>
+
+                            <img
+                              src={(productFormData.images && productFormData.images[0]) || '/assets/wigs/bodywave-30.jpg'}
+                              alt="Aperçu Studio"
+                            />
+                          </div>
+
+                          <div className="product-info">
+                            <span className="product-category">{productFormData.category}</span>
+                            <div className="product-title-link">{productFormData.title || 'Titre du Produit'}</div>
+                            <div className="product-price-row">
+                              <span className="product-price">
+                                {productFormData.price ? parseFloat(productFormData.price).toLocaleString('fr-FR') : '0'} FCFA
+                              </span>
+                              <span className={`stock-pill ${parseInt(productFormData.stock, 10) === 0 ? 'no-stock' : 'in-stock'}`}>
+                                {parseInt(productFormData.stock, 10) === 0 ? 'Épuisé' : `${productFormData.stock || 0} en stock`}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  )}
 
-                    <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '6px' }}>
-                      <span>ENREGISTRER ET PUBLIER</span>
-                    </button>
-                  </form>
                 </div>
+
+                {/* APPLE STUDIO FOOTER ACTIONS BAR */}
+                <div className="apple-studio-footer">
+                  <div>
+                    {editingProduct && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteProduct(editingProduct.id)}
+                        style={{ background: '#FADBD8', color: '#E74C3C', border: 'none', padding: '10px 18px', borderRadius: '14px', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        Supprimer l'Article
+                      </button>
+                    )}
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setIsAdminFormModalOpen(false)}
+                      style={{ background: '#FAF6FA', border: '1px solid rgba(226, 167, 180, 0.4)', color: 'var(--purple-dark)', padding: '12px 24px', borderRadius: '16px', fontSize: '0.88rem', fontWeight: 600, cursor: 'pointer' }}
+                    >
+                      Annuler
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleSaveProduct}
+                      className="btn-primary"
+                      style={{ padding: '12px 28px', borderRadius: '16px' }}
+                    >
+                      <Icon name="check" size={18} color="#FFFFFF" />
+                      <span>{editingProduct ? 'Enregistrer les Modifications' : 'Publier l’Article'}</span>
+                    </button>
+                  </div>
+                </div>
+
               </div>
             </div>
           )}
@@ -1187,7 +1291,7 @@
                   <li>
                     {isAdminAuthenticated ? (
                       <button onClick={handleOpenNewProduct} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0, color: '#27AE60', fontWeight: 700 }}>
-                        🔒 Gérer la boutique (Connecté)
+                        🔒 Apple Product Studio (Connecté)
                       </button>
                     ) : (
                       <button onClick={() => setIsAdminAuthModalOpen(true)} className="footer-link" style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}>
